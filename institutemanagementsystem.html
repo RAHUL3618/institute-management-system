@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SCI Chomu">
+<meta name="theme-color" content="#1E40AF">
+<title>Shivaji Career Institute, Chomu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pri:#1E40AF;--pri2:#2563EB;--pri-l:#EFF6FF;--pri-d:#1E3A8A;
+  --acc:#F59E0B;--acc-l:#FFFBEB;
+  --ok:#16A34A;--ok-l:#F0FDF4;
+  --err:#DC2626;--err-l:#FEF2F2;
+  --warn:#D97706;--warn-l:#FFFBEB;
+  --bg:#F1F5F9;--card:#fff;--card2:#F8FAFC;
+  --text:#0F172A;--text2:#475569;--text3:#94A3B8;
+  --border:#E2E8F0;--border2:#CBD5E1;
+  --sb:#0F172A;--sb2:#1E293B;--sb-text:#94A3B8;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:0 4px 6px -1px rgba(0,0,0,.07);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.12);
+  --r:8px;--r-lg:12px;--r-xl:16px;
+  --sb-w:220px;--top-h:58px;
+  --font:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px;}
+button,input,select,textarea{font-family:var(--font);}
+
+/* ── Shell ── */
+#app{height:100%;display:flex;flex-direction:column;}
+#shell{display:none;height:100%;flex-direction:row;overflow:hidden;}
+#shell.on{display:flex;}
+
+/* ── Sidebar ── */
+#sb{width:var(--sb-w);background:var(--sb);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;}
+.sb-top{padding:1.1rem .9rem .9rem;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:.65rem;}
+.sb-logo-svg{flex-shrink:0;}
+.sb-brand{min-width:0;}
+.sb-brand-name{font-size:.82rem;font-weight:800;color:#F1F5F9;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sb-brand-city{font-size:.65rem;color:var(--sb-text);font-weight:500;}
+.sb-nav{flex:1;padding:.5rem .6rem;}
+.sb-sec{padding:.6rem .7rem .25rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(148,163,184,.45);}
+.nav-item{display:flex;align-items:center;gap:.6rem;padding:.55rem .75rem;border-radius:7px;color:var(--sb-text);font-size:.82rem;font-weight:500;cursor:pointer;border:none;background:none;width:100%;text-align:left;margin-bottom:1px;transition:all .12s;}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.65;}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#CBD5E1;}
+.nav-item.on{background:rgba(255,255,255,.11);color:#F1F5F9;font-weight:600;}
+.nav-item.on svg{opacity:1;}
+.sb-foot{padding:.6rem;border-top:1px solid rgba(255,255,255,.07);}
+.sb-user{display:flex;align-items:center;gap:.6rem;padding:.5rem .6rem;border-radius:7px;}
+.sb-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0;}
+.sb-uname{font-size:.78rem;font-weight:600;color:#E2E8F0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sb-urole{font-size:.65rem;color:var(--sb-text);}
+.nav-logout{color:#F87171 !important;}
+
+/* ── Main ── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+#topbar{height:var(--top-h);background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.25rem;gap:.85rem;flex-shrink:0;}
+#tb-title{font-size:.95rem;font-weight:700;flex:1;}
+.tb-chip{display:flex;align-items:center;gap:.35rem;font-size:.74rem;color:var(--text2);background:var(--bg);padding:.28rem .7rem;border-radius:100px;border:1px solid var(--border);}
+.tb-dot{width:6px;height:6px;border-radius:50%;background:var(--ok);}
+#page{flex:1;overflow-y:auto;padding:1.25rem;}
+
+/* ── Login ── */
+#login{display:none;min-height:100vh;background:linear-gradient(135deg,#0F172A 0%,#1E293B 60%,#0F172A 100%);align-items:center;justify-content:center;padding:1rem;flex-direction:column;gap:1rem;}
+#login.on{display:flex;}
+.login-card{background:var(--card);border-radius:20px;width:100%;max-width:400px;overflow:hidden;box-shadow:var(--shadow-lg);}
+.login-hero{background:linear-gradient(135deg,var(--pri-d) 0%,var(--pri2) 100%);padding:1.75rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:.75rem;}
+.login-hero-name{font-size:1.1rem;font-weight:800;color:#fff;text-align:center;line-height:1.3;}
+.login-hero-city{font-size:.78rem;color:rgba(255,255,255,.75);font-weight:500;}
+.login-body{padding:1.5rem;}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem;}
+.role-pill{padding:.65rem .5rem;border-radius:var(--r);border:2px solid var(--border);background:var(--card);cursor:pointer;text-align:center;transition:all .15s;}
+.role-pill:hover{border-color:var(--pri2);background:var(--pri-l);}
+.role-pill.on{border-color:var(--pri2);background:var(--pri-l);}
+.role-pill .ri{font-size:1.2rem;display:block;margin-bottom:.25rem;}
+.role-pill .rl{font-size:.73rem;font-weight:700;color:var(--text);}
+.lf{display:flex;flex-direction:column;gap:.65rem;}
+.lf label{font-size:.75rem;font-weight:600;color:var(--text2);}
+.lf input{background:var(--bg);border:1px solid var(--border2);border-radius:var(--r);padding:.55rem .85rem;font-size:.88rem;color:var(--text);outline:none;width:100%;transition:border-color .15s;}
+.lf input:focus{border-color:var(--pri2);}
+.lerr{font-size:.78rem;color:var(--err);background:var(--err-l);padding:.5rem .8rem;border-radius:var(--r);display:none;margin-bottom:.5rem;}
+.lerr.on{display:block;}
+.lbtn{width:100%;padding:.7rem;background:var(--pri2);color:#fff;border:none;border-radius:var(--r);font-size:.9rem;font-weight:700;cursor:pointer;margin-top:.5rem;transition:background .15s;}
+.lbtn:hover{background:var(--pri);}
+.lhint{font-size:.72rem;color:var(--text3);text-align:center;margin-top:.75rem;line-height:1.6;}
+.lhint kbd{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.05rem .3rem;font-size:.7rem;}
+.pwa-hint{font-size:.74rem;color:rgba(255,255,255,.6);text-align:center;max-width:300px;}
+
+/* ── Cards & Layout ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow);}
+.ch{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.ct{font-size:.88rem;font-weight:700;}
+.cb{padding:1.1rem;}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.85rem;margin-bottom:1.1rem;}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.1rem;display:flex;align-items:flex-start;gap:.8rem;box-shadow:var(--shadow);}
+.si{width:40px;height:40px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.sv{font-size:1.5rem;font-weight:800;line-height:1;letter-spacing:-.03em;}
+.sl{font-size:.72rem;color:var(--text2);margin-top:.15rem;}
+.ss{font-size:.68rem;font-weight:600;margin-top:.25rem;}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.pt{font-size:1.1rem;font-weight:800;letter-spacing:-.02em;}
+.ps{font-size:.78rem;color:var(--text2);margin-top:.1rem;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;}
+hr.div{border:none;border-top:1px solid var(--border);margin:.65rem 0;}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .9rem;border-radius:var(--r);font-size:.8rem;font-weight:600;border:1px solid transparent;cursor:pointer;transition:all .12s;white-space:nowrap;}
+.btn:active{transform:scale(.97);}
+.btn-pri{background:var(--pri2);color:#fff;}
+.btn-pri:hover{background:var(--pri);}
+.btn-out{background:transparent;color:var(--text);border-color:var(--border2);}
+.btn-out:hover{background:var(--bg);}
+.btn-ok{background:var(--ok-l);color:var(--ok);border-color:rgba(22,163,74,.25);}
+.btn-err{background:var(--err-l);color:var(--err);border-color:rgba(220,38,38,.25);}
+.btn-warn{background:var(--warn-l);color:var(--warn);border-color:rgba(217,119,6,.25);}
+.btn-acc{background:var(--acc);color:#000;border-color:var(--acc);}
+.btn-sm{padding:.3rem .65rem;font-size:.74rem;}
+.btn-lg{padding:.65rem 1.3rem;font-size:.88rem;}
+.btn-ico{width:32px;height:32px;padding:0;justify-content:center;}
+
+/* ── Forms ── */
+.fg{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.75rem;}
+.fg label{font-size:.75rem;font-weight:600;color:var(--text2);}
+.fg.full{grid-column:1/-1;}
+.fc{background:var(--bg);border:1px solid var(--border2);border-radius:var(--r);padding:.52rem .8rem;color:var(--text);font-size:.85rem;outline:none;width:100%;transition:border-color .15s,box-shadow .15s;}
+.fc:focus{border-color:var(--pri2);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+textarea.fc{resize:vertical;min-height:75px;}
+select.fc option{background:#fff;}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.fhint{font-size:.7rem;color:var(--text3);margin-top:.2rem;}
+
+/* ── Tables ── */
+.tw{overflow-x:auto;border-radius:var(--r-lg);border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;background:var(--card);}
+thead th{background:var(--card2);padding:.6rem .9rem;text-align:left;font-size:.72rem;font-weight:700;color:var(--text2);white-space:nowrap;border-bottom:1px solid var(--border);}
+tbody td{padding:.7rem .9rem;border-bottom:1px solid var(--border);font-size:.82rem;vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:#FAFBFC;}
+
+/* ── Badges ── */
+.b{display:inline-flex;align-items:center;gap:.25rem;padding:.15rem .55rem;border-radius:100px;font-size:.68rem;font-weight:700;}
+.bok{background:var(--ok-l);color:var(--ok);}
+.berr{background:var(--err-l);color:var(--err);}
+.bwarn{background:var(--warn-l);color:var(--warn);}
+.bpri{background:var(--pri-l);color:var(--pri);}
+.bacc{background:var(--acc-l);color:var(--warn);}
+.bgray{background:var(--bg);color:var(--text2);border:1px solid var(--border);}
+
+/* ── Modal ── */
+#mbg{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:900;padding:1rem;}
+#mbg.on{display:flex;}
+#mbox{background:var(--card);border-radius:var(--r-xl);width:100%;max-width:520px;max-height:92vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:mIn .18s ease;}
+@keyframes mIn{from{transform:translateY(10px);opacity:0;}to{transform:none;opacity:1;}}
+.mh{padding:1rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.mt-m{font-size:.92rem;font-weight:700;}
+.mx{background:none;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer;padding:.15rem;border-radius:5px;}
+.mx:hover{background:var(--bg);}
+.mb-m{padding:1.2rem;}
+.mf{padding:.9rem 1.2rem;border-top:1px solid var(--border);display:flex;gap:.6rem;justify-content:flex-end;}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:1.25rem;right:1.25rem;display:flex;flex-direction:column;gap:.4rem;z-index:9999;}
+.tk{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:.65rem .9rem;display:flex;align-items:center;gap:.5rem;box-shadow:var(--shadow-lg);animation:tkIn .2s ease;font-size:.8rem;font-weight:500;max-width:300px;}
+.tk.ok{border-left:3px solid var(--ok);}
+.tk.err{border-left:3px solid var(--err);}
+.tk.info{border-left:3px solid var(--pri2);}
+@keyframes tkIn{from{transform:translateX(30px);opacity:0;}to{transform:none;opacity:1;}}
+
+/* ── Attendance ── */
+.arow{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.75rem;padding:.55rem .85rem;border-radius:var(--r);border:1px solid var(--border);background:var(--card);margin-bottom:.4rem;}
+.aav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0;}
+.an{font-size:.83rem;font-weight:600;}
+.ar{font-size:.68rem;color:var(--text3);}
+.atg{display:flex;gap:.3rem;}
+.at{padding:.28rem .6rem;border-radius:6px;border:1.5px solid var(--border);background:var(--bg);font-size:.72rem;font-weight:700;cursor:pointer;transition:all .1s;}
+.at.P.on{background:var(--ok-l);border-color:var(--ok);color:var(--ok);}
+.at.A.on{background:var(--err-l);border-color:var(--err);color:var(--err);}
+.at.L.on{background:var(--warn-l);border-color:var(--warn);color:var(--warn);}
+
+/* ── Exam Secure Screen ── */
+#exscreen{display:none;position:fixed;inset:0;background:#F8FAFC;z-index:800;flex-direction:column;}
+#exscreen.on{display:flex;}
+.ex-top{background:var(--card);border-bottom:1px solid var(--border);padding:0 1.25rem;height:52px;display:flex;align-items:center;gap:.85rem;flex-shrink:0;}
+.ex-t{font-weight:700;font-size:.88rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ex-timer{font-family:var(--mono);font-size:.95rem;font-weight:700;color:var(--pri2);background:var(--pri-l);padding:.28rem .75rem;border-radius:100px;}
+.ex-timer.red{color:var(--err);background:var(--err-l);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.5;}}
+.ex-body{flex:1;overflow-y:auto;padding:1.25rem;max-width:700px;margin:0 auto;width:100%;}
+.ex-prog{background:var(--border);border-radius:100px;height:4px;margin-bottom:1.25rem;overflow:hidden;}
+.ex-pf{height:100%;background:var(--pri2);border-radius:100px;transition:width .3s;}
+.ex-qcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.35rem;margin-bottom:.85rem;}
+.ex-qhead{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;}
+.ex-qn{width:28px;height:28px;background:var(--pri2);color:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0;}
+.ex-qt-badge{font-size:.68rem;color:var(--text2);background:var(--bg);padding:.15rem .55rem;border-radius:100px;border:1px solid var(--border);}
+.ex-qmk{margin-left:auto;font-size:.7rem;color:var(--text3);}
+.ex-qtxt{font-size:.95rem;font-weight:500;line-height:1.65;margin-bottom:1.1rem;}
+.ex-opts{display:flex;flex-direction:column;gap:.45rem;}
+
+/* CRITICAL FIX: No hover state on touch, only selected state */
+.ex-opt{display:flex;align-items:center;gap:.75rem;padding:.75rem .95rem;background:var(--bg);border:2px solid var(--border);border-radius:var(--r);cursor:pointer;width:100%;text-align:left;transition:border-color .12s,background .12s;}
+.ex-opt.sel{border-color:var(--pri2);background:var(--pri-l);}
+@media(hover:hover){.ex-opt:not(.sel):hover{border-color:var(--border2);background:var(--card);}}
+.ex-ok{width:26px;height:26px;border-radius:6px;background:var(--card);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.74rem;font-weight:700;color:var(--text2);flex-shrink:0;transition:all .12s;}
+.ex-opt.sel .ex-ok{background:var(--pri2);color:#fff;border-color:var(--pri2);}
+.ex-otxt{font-size:.88rem;flex:1;}
+.ex-short{width:100%;background:var(--bg);border:2px solid var(--border);border-radius:var(--r);padding:.8rem 1rem;font-size:.88rem;color:var(--text);outline:none;resize:vertical;min-height:100px;transition:border-color .15s;}
+.ex-short:focus{border-color:var(--pri2);}
+.ex-pal{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1rem;}
+.ep{width:30px;height:30px;border-radius:6px;border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-size:.74rem;font-weight:600;cursor:pointer;transition:all .1s;}
+.ep.done{background:var(--ok-l);border-color:var(--ok);color:var(--ok);}
+.ep.cur{border-color:var(--pri2);color:var(--pri2);font-weight:800;}
+.ep.flag{background:var(--warn-l);border-color:var(--warn);color:var(--warn);}
+.ex-nav{display:flex;align-items:center;justify-content:space-between;margin-top:.85rem;}
+.ex-pos{font-size:.78rem;color:var(--text2);}
+.ex-sec-ov{position:fixed;inset:0;background:rgba(220,38,38,.96);display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;z-index:850;text-align:center;padding:2rem;}
+.ex-sec-ov.on{display:flex;}
+.ex-sec-ico{font-size:3.5rem;}
+.ex-sec-ttl{font-size:1.3rem;font-weight:800;color:#fff;}
+.ex-sec-msg{color:rgba(255,255,255,.85);max-width:380px;line-height:1.6;font-size:.9rem;}
+
+/* ── Review screen (after exam) ── */
+.rv-q{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.1rem;margin-bottom:.75rem;}
+.rv-qhead{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;}
+.rv-num{font-size:.72rem;font-weight:700;color:var(--text2);}
+.rv-status{font-size:.68rem;font-weight:700;padding:.15rem .55rem;border-radius:100px;}
+.rv-status.correct{background:var(--ok-l);color:var(--ok);}
+.rv-status.wrong{background:var(--err-l);color:var(--err);}
+.rv-status.skip{background:var(--bg);color:var(--text3);border:1px solid var(--border);}
+.rv-qtxt{font-size:.9rem;font-weight:500;margin-bottom:.75rem;line-height:1.55;}
+.rv-opt{padding:.5rem .8rem;border-radius:var(--r);font-size:.82rem;margin-bottom:.3rem;border:1.5px solid var(--border);}
+.rv-opt.correct{border-color:var(--ok);background:var(--ok-l);color:var(--ok);}
+.rv-opt.wrong-chosen{border-color:var(--err);background:var(--err-l);color:var(--err);}
+.rv-exp{background:var(--acc-l);border:1px solid rgba(245,158,11,.2);border-radius:var(--r);padding:.65rem .85rem;font-size:.78rem;color:var(--warn);margin-top:.65rem;line-height:1.55;}
+
+/* ── Result screen ── */
+.rs-circle{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;border:5px solid;margin:0 auto 1.25rem;}
+.rs-circle.pass{border-color:var(--ok);color:var(--ok);background:var(--ok-l);}
+.rs-circle.fail{border-color:var(--err);color:var(--err);background:var(--err-l);}
+.rs-pct{font-size:1.6rem;font-weight:800;line-height:1;}
+.rs-lbl{font-size:.6rem;font-weight:700;opacity:.7;}
+
+/* ── Progress bar ── */
+.pb{background:var(--border);border-radius:100px;height:7px;overflow:hidden;}
+.pbf{height:100%;border-radius:100px;transition:width .5s;}
+
+/* ── Empty state ── */
+.empty{text-align:center;padding:3rem 1rem;color:var(--text3);}
+.empty-ico{font-size:2.25rem;margin-bottom:.6rem;opacity:.45;}
+.empty-txt{font-size:.86rem;}
+
+/* ── Fees ── */
+.fee-row{display:flex;align-items:center;gap:.85rem;padding:.75rem;border-radius:var(--r);border:1px solid var(--border);background:var(--card);margin-bottom:.4rem;}
+.fee-ico{width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.fee-info{flex:1;min-width:0;}
+.fee-name{font-size:.84rem;font-weight:600;}
+.fee-due{font-size:.7rem;color:var(--text3);}
+.fee-amt{font-family:var(--mono);font-size:.9rem;font-weight:700;}
+
+/* ── Misc ── */
+.txt-sm{font-size:.8rem;}.txt-xs{font-size:.7rem;}.txt-muted{color:var(--text2);}
+.fw7{font-weight:700;}.fw6{font-weight:600;}
+.mt1{margin-top:.6rem;}.mt2{margin-top:1rem;}.mt3{margin-top:1.5rem;}
+.mb1{margin-bottom:.5rem;}.mb2{margin-bottom:1rem;}
+.ann-item{display:flex;gap:.75rem;padding:.8rem;background:var(--bg);border-radius:var(--r);border:1px solid var(--border);margin-bottom:.5rem;}
+.ann-bar{width:4px;border-radius:4px;flex-shrink:0;align-self:stretch;}
+.instr-box{background:var(--pri-l);border:1px solid rgba(37,99,235,.2);border-radius:var(--r-lg);padding:1.1rem;margin-bottom:1rem;}
+.instr-box li{font-size:.84rem;color:var(--pri);margin-bottom:.3rem;line-height:1.55;}
+
+@media(max-width:640px){
+  :root{--sb-w:0px;}#sb{display:none;}
+  .fgrid{grid-template-columns:1fr;}
+  .sg{grid-template-columns:1fr 1fr;}
+  .g2,.g3{grid-template-columns:1fr;}
+  #page{padding:.9rem;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- LOGIN -->
+<div id="login" class="on">
+  <div class="login-card">
+    <div class="login-hero">
+      <svg width="54" height="54" viewBox="0 0 54 54">
+        <rect width="54" height="54" rx="13" fill="rgba(255,255,255,.15)"/>
+        <path d="M27 8 L44 17 L44 37 Q44 45 27 49 Q10 45 10 37 L10 17 Z" fill="rgba(255,255,255,.2)" stroke="rgba(255,255,255,.5)" stroke-width="1.5"/>
+        <text x="27" y="33" font-family="Plus Jakarta Sans,sans-serif" font-size="14" font-weight="800" fill="white" text-anchor="middle">SCI</text>
+      </svg>
+      <div>
+        <div class="login-hero-name">Shivaji Career Institute</div>
+        <div class="login-hero-city">Chomu, Rajasthan</div>
+      </div>
+    </div>
+    <div class="login-body">
+      <div class="role-grid">
+        <div class="role-pill on" data-r="student" onclick="setRole('student')"><span class="ri">🎓</span><span class="rl">Student</span></div>
+        <div class="role-pill" data-r="teacher" onclick="setRole('teacher')"><span class="ri">👨‍🏫</span><span class="rl">Teacher</span></div>
+        <div class="role-pill" data-r="parent" onclick="setRole('parent')"><span class="ri">👨‍👩‍👧</span><span class="rl">Parent</span></div>
+        <div class="role-pill" data-r="exam" onclick="setRole('exam')"><span class="ri">📋</span><span class="rl">Exam Cell</span></div>
+      </div>
+      <div class="lerr" id="lerr"></div>
+      <div class="lf">
+        <div><label id="lid-lbl">Roll Number</label><input class="fc" id="lid" type="text" placeholder="Enter ID" autocomplete="username"></div>
+        <div><label>Password</label><input class="fc" id="lpwd" type="password" placeholder="Password" autocomplete="current-password"></div>
+      </div>
+      <button class="lbtn" onclick="doLogin()">Login →</button>
+      <div class="lhint">Student: roll no + <kbd>1234</kbd> | Teacher: <kbd>teacher1</kbd> / <kbd>pass123</kbd><br>Parent: <kbd>P001</kbd> / <kbd>1234</kbd> | Exam Cell: <kbd>exam1</kbd> / <kbd>exam123</kbd></div>
+    </div>
+  </div>
+  <div class="pwa-hint">📱 Tap browser menu → "Add to Home Screen" to install as app</div>
+</div>
+
+<!-- APP SHELL -->
+<div id="shell">
+  <aside id="sb">
+    <div class="sb-top">
+      <svg class="sb-logo-svg" width="34" height="34" viewBox="0 0 34 34">
+        <rect width="34" height="34" rx="8" fill="#2563EB"/>
+        <path d="M17 4 L28 10 L28 24 Q28 30 17 33 Q6 30 6 24 L6 10 Z" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+        <text x="17" y="22" font-family="Plus Jakarta Sans,sans-serif" font-size="9" font-weight="800" fill="white" text-anchor="middle">SCI</text>
+      </svg>
+      <div class="sb-brand">
+        <div class="sb-brand-name">Shivaji Career Institute</div>
+        <div class="sb-brand-city">Chomu, Rajasthan</div>
+      </div>
+    </div>
+    <nav class="sb-nav" id="sb-nav"></nav>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-av" id="sb-av">A</div>
+        <div style="flex:1;min-width:0"><div class="sb-uname" id="sb-nm">User</div><div class="sb-urole" id="sb-rl">Role</div></div>
+      </div>
+      <button class="nav-item nav-logout" onclick="doLogout()" style="margin-top:.25rem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+  <div id="main">
+    <header id="topbar">
+      <div id="tb-title">Dashboard</div>
+      <div class="tb-chip"><div class="tb-dot"></div><span id="tb-dt"></span></div>
+      <div class="tb-chip" id="tb-user">👤</div>
+    </header>
+    <main id="page"></main>
+  </div>
+</div>
+
+<!-- EXAM SCREEN -->
+<div id="exscreen">
+  <div class="ex-top">
+    <div class="ex-t" id="ex-t"></div>
+    <div id="ex-sn" style="font-size:.75rem;color:var(--text2)"></div>
+    <div class="ex-timer" id="ex-timer">00:00</div>
+  </div>
+  <div class="ex-body">
+    <div style="font-size:.68rem;color:var(--text2);font-weight:700;margin-bottom:.4rem;letter-spacing:.05em">NAVIGATOR</div>
+    <div class="ex-pal" id="ex-pal"></div>
+    <div class="ex-prog"><div class="ex-pf" id="ex-pf" style="width:0%"></div></div>
+    <div id="ex-qr"></div>
+    <div class="ex-nav">
+      <button class="btn btn-out btn-sm" id="ex-prev" onclick="eNav(-1)">← Prev</button>
+      <span class="ex-pos" id="ex-pos"></span>
+      <button class="btn btn-pri btn-sm" id="ex-next" onclick="eNav(1)">Next →</button>
+    </div>
+    <div style="text-align:center;margin-top:1.25rem">
+      <button class="btn btn-err btn-lg" onclick="confirmSub()" style="padding:.6rem 2rem">Submit Exam</button>
+    </div>
+  </div>
+  <div class="ex-sec-ov" id="ex-sec-ov">
+    <div class="ex-sec-ico" id="ex-sec-ico">⚠️</div>
+    <div class="ex-sec-ttl" id="ex-sec-ttl">Warning</div>
+    <div class="ex-sec-msg" id="ex-sec-msg"></div>
+    <button class="btn" style="background:#fff;color:var(--err);margin-top:.5rem" id="ex-sec-btn">OK</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="mbg" onclick="if(event.target===this)CM()">
+  <div id="mbox">
+    <div class="mh"><div class="mt-m" id="mt"></div><button class="mx" onclick="CM()">✕</button></div>
+    <div class="mb-m" id="mb"></div>
+    <div class="mf" id="mf"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════
+// DATABASE LAYER
+// ═══════════════════════════════════════════════
+const DB={
+  PFX:'sci_',
+  g(k){try{const v=localStorage.getItem(this.PFX+k);return v?JSON.parse(v):null;}catch{return null;}},
+  s(k,v){try{localStorage.setItem(this.PFX+k,JSON.stringify(v));return true;}catch{return false;}},
+  rm(k){localStorage.removeItem(this.PFX+k);},
+  col(name){
+    return{
+      all:()=>DB.g(name)||[],
+      find:(fn)=>(DB.g(name)||[]).filter(fn),
+      one:(fn)=>(DB.g(name)||[]).find(fn)||null,
+      ins:(item)=>{const rows=DB.g(name)||[];const row={...item,id:item.id||uid(),_c:item._c||Date.now()};rows.push(row);DB.s(name,rows);return row;},
+      upd:(id,data)=>{const rows=DB.g(name)||[];const i=rows.findIndex(r=>r.id===id);if(i<0)return null;rows[i]={...rows[i],...data,_u:Date.now()};DB.s(name,rows);return rows[i];},
+      del:(id)=>{DB.s(name,(DB.g(name)||[]).filter(r=>r.id!==id));},
+      cnt:()=>(DB.g(name)||[]).length,
+    };
+  }
+};
+
+// Attendance per date
+const ATT={
+  g:(d)=>DB.g('att_'+d)||{},
+  s:(d,v)=>DB.s('att_'+d,v),
+  mark:(d,sid,st)=>{const a=ATT.g(d);a[sid]=st;ATT.s(d,a);},
+  pct:(sid,days=30)=>{
+    const recs=[];
+    for(let i=0;i<days;i++){const d=new Date();d.setDate(d.getDate()-i);const ds=ds_fmt(d);const a=ATT.g(ds);if(a[sid])recs.push(a[sid]);}
+    if(!recs.length)return null;
+    return Math.round((recs.filter(s=>s==='P').length/recs.length)*100);
+  },
+  hist:(sid,days=30)=>{
+    const recs=[];
+    for(let i=0;i<days;i++){const d=new Date();d.setDate(d.getDate()-i);const ds=ds_fmt(d);const a=ATT.g(ds);if(a[sid]!==undefined)recs.push({date:ds,st:a[sid]});}
+    return recs;
+  }
+};
+
+// ═══════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
+function ds_fmt(d=new Date()){return d.toISOString().split('T')[0];}
+function fDate(ds){return new Date(ds+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}
+function fDT(ts){return new Date(ts).toLocaleDateString('en-IN',{day:'numeric',month:'short'})+' '+new Date(ts).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function avCol(name){const cs=['#2563EB','#7C3AED','#DB2777','#D97706','#16A34A','#0891B2','#9333EA'];let h=0;for(const c of String(name||'?'))h=c.charCodeAt(0)+(h<<5)-h;return cs[Math.abs(h)%cs.length];}
+function avIn(name){return String(name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+function pbar(pct,color){return`<div class="pb"><div class="pbf" style="width:${pct}%;background:${color||'var(--pri2)'}"></div></div>`;}
+
+// Seeded shuffle — same student always gets same order
+function seededShuffle(arr,seed){
+  const r=[...arr];let s=0;
+  for(const c of String(seed))s=Math.imul(s^c.charCodeAt(0),0x45d9f3b);
+  for(let i=r.length-1;i>0;i--){s=Math.imul(s^(s>>>16),0x45d9f3b);s^=s>>>16;const j=Math.abs(s)%(i+1);[r[i],r[j]]=[r[j],r[i]];}
+  return r;
+}
+
+// ═══════════════════════════════════════════════
+// TOAST & MODAL
+// ═══════════════════════════════════════════════
+function toast(msg,type='info',dur=3000){
+  const el=document.createElement('div');el.className=`tk ${type}`;
+  el.innerHTML=`<span>${type==='ok'?'✓':type==='err'?'✕':'ℹ'}</span><span>${esc(msg)}</span>`;
+  document.getElementById('toast').appendChild(el);setTimeout(()=>el.remove(),dur);
+}
+
+function OM(title,bodyHtml,foot=[]){
+  document.getElementById('mt').textContent=title;
+  document.getElementById('mb').innerHTML=bodyHtml;
+  document.getElementById('mf').innerHTML=foot.map(b=>`<button class="btn ${b.c||'btn-out'}" onclick="${b.fn}">${b.l}</button>`).join('');
+  document.getElementById('mbg').classList.add('on');
+}
+function CM(){document.getElementById('mbg').classList.remove('on');}
+
+// ═══════════════════════════════════════════════
+// AUTH & SESSION
+// ═══════════════════════════════════════════════
+let S={user:null,role:null,page:null,params:{},attDate:ds_fmt(),eState:null};
+
+function setRole(r){
+  document.querySelectorAll('.role-pill').forEach(p=>{p.classList.toggle('on',p.dataset.r===r);});
+  const labels={student:'Roll Number',teacher:'Username',parent:'Parent ID',exam:'Username'};
+  document.getElementById('lid-lbl').textContent=labels[r]||'Username';
+  S._loginRole=r;
+}
+S._loginRole='student';
+
+function doLogin(){
+  const id=document.getElementById('lid').value.trim();
+  const pwd=document.getElementById('lpwd').value.trim();
+  const err=document.getElementById('lerr');
+  err.classList.remove('on');
+  if(!id||!pwd){err.textContent='Enter ID and password';err.classList.add('on');return;}
+  const role=S._loginRole;
+  let user=null;
+  if(role==='student'){user=DB.col('students').one(s=>s.roll===id&&(s.pwd||'1234')===pwd);}
+  else if(role==='teacher'){user=DB.col('teachers').one(t=>t.uname===id&&(t.pwd||'pass123')===pwd);}
+  else if(role==='parent'){user=DB.col('parents').one(p=>p.pid===id&&(p.pwd||'1234')===pwd);}
+  else if(role==='exam'){user=DB.col('examiners').one(e=>e.uname===id&&(e.pwd||'exam123')===pwd);}
+  if(!user){err.textContent='Invalid credentials. Please try again.';err.classList.add('on');return;}
+  S.user={...user};S.role=role;
+  DB.s('session',{uid:user.id,role,loginAt:Date.now()});
+  startApp();
+}
+
+function doLogout(){S.user=null;S.role=null;DB.rm('session');showLogin();}
+
+function showLogin(){
+  document.getElementById('login').classList.add('on');
+  document.getElementById('shell').classList.remove('on');
+  document.getElementById('lid').value='';document.getElementById('lpwd').value='';
+  document.getElementById('exscreen').classList.remove('on');
+}
+
+function restoreSession(){
+  const sess=DB.g('session');
+  if(!sess)return false;
+  const cols={student:'students',teacher:'teachers',parent:'parents',exam:'examiners'};
+  const col=DB.col(cols[sess.role]);
+  if(!col)return false;
+  const user=col.one(u=>u.id===sess.uid);
+  if(!user)return false;
+  S.user={...user};S.role=sess.role;
+  return true;
+}
+
+function startApp(){
+  document.getElementById('login').classList.remove('on');
+  document.getElementById('shell').classList.add('on');
+  document.getElementById('tb-dt').textContent=new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+  document.getElementById('tb-user').textContent='👤 '+S.user.name;
+  buildSidebar();
+  go('dashboard');
+}
+
+// ═══════════════════════════════════════════════
+// SIDEBAR & ROUTER
+// ═══════════════════════════════════════════════
+const NAV={
+  student:[
+    {id:'dashboard',l:'Dashboard',ic:'home'},
+    {id:'attendance',l:'My Attendance',ic:'cal'},
+    {id:'exams',l:'My Exams',ic:'book'},
+    {id:'results',l:'My Results',ic:'chart'},
+    {id:'fees',l:'My Fees',ic:'fees'},
+    {id:'announcements',l:'Announcements',ic:'bell'},
+    {id:'chpwd',l:'Change Password',ic:'lock'},
+  ],
+  teacher:[
+    {id:'dashboard',l:'Dashboard',ic:'home'},
+    {id:'students',l:'Students',ic:'users'},
+    {id:'attendance',l:'Attendance',ic:'cal'},
+    {id:'exams',l:'Exams',ic:'book'},
+    {id:'results',l:'Results',ic:'chart'},
+    {id:'fees',l:'Fees Management',ic:'fees'},
+    {id:'announcements',l:'Announcements',ic:'bell'},
+    {id:'chpwd',l:'Change Password',ic:'lock'},
+  ],
+  parent:[
+    {id:'dashboard',l:'Dashboard',ic:'home'},
+    {id:'attendance',l:'Attendance',ic:'cal'},
+    {id:'results',l:'Results',ic:'chart'},
+    {id:'fees',l:'Fees',ic:'fees'},
+    {id:'announcements',l:'Announcements',ic:'bell'},
+    {id:'chpwd',l:'Change Password',ic:'lock'},
+  ],
+  exam:[
+    {id:'dashboard',l:'Dashboard',ic:'home'},
+    {id:'offline-exams',l:'Offline Exams',ic:'book'},
+    {id:'enter-results',l:'Enter OMR Results',ic:'chart'},
+    {id:'chpwd',l:'Change Password',ic:'lock'},
+  ],
+};
+
+const ICONS={
+  home:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+  users:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>`,
+  cal:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+  book:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>`,
+  chart:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+  fees:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`,
+  bell:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>`,
+  lock:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>`,
+};
+
+function buildSidebar(){
+  const items=NAV[S.role]||[];
+  document.getElementById('sb-nav').innerHTML=items.map(n=>`
+    <button class="nav-item ${S.page===n.id?'on':''}" onclick="go('${n.id}')">
+      ${ICONS[n.ic]||''} ${n.l}
+    </button>`).join('');
+  const col={av:avCol(S.user.name),in:avIn(S.user.name),nm:S.user.name,rl:{student:'Student',teacher:'Teacher',parent:'Parent',exam:'Exam Cell'}[S.role]};
+  document.getElementById('sb-av').textContent=col.in;document.getElementById('sb-av').style.background=col.av;
+  document.getElementById('sb-nm').textContent=col.nm;document.getElementById('sb-rl').textContent=col.rl;
+}
+
+const PAGE_TITLES={dashboard:'Dashboard',students:'Students',attendance:'Attendance',exams:'Exams','create-exam':'Create Exam',results:'Results','offline-exams':'Offline Exams','enter-results':'Enter Results',fees:'Fees',announcements:'Announcements',chpwd:'Change Password','exam-review':'Exam Review'};
+
+function go(page,params={}){
+  S.page=page;S.params=params;
+  document.getElementById('tb-title').textContent=PAGE_TITLES[page]||page;
+  buildSidebar();
+  const p=document.getElementById('page');p.innerHTML='';
+  const map={
+    dashboard:{student:sDash,teacher:tDash,parent:pDash,exam:eDash},
+    students:tStudents,attendance:{student:sAtt,teacher:tAtt,parent:pAtt},
+    exams:{student:sExams,teacher:tExams},'create-exam':tCreateExam,
+    results:{student:sResults,teacher:tResults,parent:pResults},
+    'offline-exams':eOfflineExams,'enter-results':eEnterResults,
+    fees:{student:sFees,teacher:tFees,parent:pFees},
+    announcements:pgAnn,chpwd:pgChPwd,'exam-review':pgReview,
+  };
+  const fn=map[page];
+  if(typeof fn==='function')fn();
+  else if(fn&&typeof fn==='object'&&fn[S.role])fn[S.role]();
+}
+
+// ═══════════════════════════════════════════════
+// TEACHER DASHBOARD
+// ═══════════════════════════════════════════════
+function tDash(){
+  const today=ds_fmt();
+  const att=ATT.g(today);
+  const total=DB.col('students').cnt();
+  const pres=Object.values(att).filter(v=>v==='P').length;
+  const marked=Object.keys(att).length;
+  const exams=DB.col('exams').all();
+  const results=DB.col('results').all();
+  const anns=DB.col('announcements').all().reverse().slice(0,3);
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">Good ${hour()}, ${S.user.name.split(' ')[0]} 👋</div><div class="ps">${fDate(today)} — Shivaji Career Institute, Chomu</div></div></div>
+    <div class="sg">
+      ${sc('👥','var(--pri-l)',total,'Total Students','All batches','var(--pri2)')}
+      ${sc('📅','var(--ok-l)',marked>0?attPct(pres,marked)+'%':'—','Today Attendance',pres+'/'+marked+' marked','var(--ok)')}
+      ${sc('📝','var(--acc-l)',exams.length,'Total Exams',results.length+' submissions','var(--warn)')}
+      ${sc('🏆','#F5F3FF',results.filter(r=>r.passed).length,'Students Passed',results.length?Math.round(results.filter(r=>r.passed).length/results.length*100)+'% pass rate':'No exams','#7C3AED')}
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="ch"><div class="ct">📅 Today's Attendance</div><button class="btn btn-pri btn-sm" onclick="go('attendance')">Mark</button></div>
+        <div class="cb">${miniAttChart(today,total,pres,marked)}</div>
+      </div>
+      <div class="card">
+        <div class="ch"><div class="ct">📢 Latest Announcements</div><button class="btn btn-out btn-sm" onclick="go('announcements')">All</button></div>
+        <div class="cb">${anns.length?anns.map(a=>`<div class="ann-item mb1"><div class="ann-bar" style="background:${a.pri==='high'?'var(--err)':a.pri==='med'?'var(--warn)':'var(--ok)'}"></div><div><div class="fw6 txt-sm">${esc(a.title)}</div><div class="txt-xs txt-muted mt1">${esc(a.content.slice(0,70))}…</div></div></div>`).join(''):'<div class="empty"><div class="empty-ico">📢</div><div class="empty-txt">No announcements</div></div>'}
+        </div>
+      </div>
+    </div>
+    <div class="card mt2">
+      <div class="ch"><div class="ct">📊 Recent Submissions</div><button class="btn btn-out btn-sm" onclick="go('results')">All</button></div>
+      ${DB.col('results').all().length?`<div class="tw" style="border:none;border-radius:0"><table><thead><tr><th>Student</th><th>Exam</th><th>Score</th><th>Status</th><th>Time</th></tr></thead><tbody>
+        ${DB.col('results').all().slice(-6).reverse().map(r=>{
+          const ex=DB.col('exams').one(e=>e.id===r.examId);
+          const st=DB.col('students').one(s=>s.id===r.studentId);
+          const pct=r.total>0?Math.round(r.score/r.total*100):0;
+          return`<tr><td><div class="fw6">${esc(st?.name||r.sName||'—')}</div></td><td class="txt-sm txt-muted">${esc(ex?.title||'—')}</td><td><span style="font-family:var(--mono);font-weight:700">${r.score}/${r.total}</span></td><td><span class="b ${r.passed?'bok':'berr'}">${r.passed?'Pass':'Fail'} ${pct}%</span></td><td class="txt-xs txt-muted">${fDT(r._c)}</td></tr>`;}).join('')}
+      </tbody></table></div>`:'<div class="cb"><div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">No submissions yet</div></div></div>'}
+    </div>`;
+}
+
+function sc(icon,bg,val,label,sub,color){
+  return`<div class="sc"><div class="si" style="background:${bg}">${icon}</div><div><div class="sv" style="color:${color||'var(--text)'}">${esc(String(val))}</div><div class="sl">${label}</div><div class="ss txt-muted">${sub}</div></div></div>`;
+}
+function attPct(p,m){return m>0?Math.round(p/m*100):0;}
+function miniAttChart(today,total,pres,marked){
+  const absent=Object.values(ATT.g(today)).filter(v=>v==='A').length;
+  const unm=total-marked;
+  const pct=total>0?Math.round(pres/total*100):0;
+  return`<div style="display:flex;gap:1.5rem;align-items:center">${pbar(pct,'var(--ok)')}<div class="txt-sm txt-muted">${pres}P · ${absent}A · ${unm} unmarked</div><div style="font-size:1.4rem;font-weight:800;color:var(--ok)">${pct}%</div></div>`;
+}
+function hour(){const h=new Date().getHours();return h<12?'morning':h<17?'afternoon':'evening';}
+
+// ═══════════════════════════════════════════════
+// STUDENT DASHBOARD
+// ═══════════════════════════════════════════════
+function sDash(){
+  const sid=S.user.id;
+  const pct=ATT.pct(sid,30);
+  const today=ds_fmt();
+  const todayAtt=ATT.g(today)[sid];
+  const exams=DB.col('exams').find(e=>e.type==='online');
+  const myR=DB.col('results').find(r=>r.studentId===sid);
+  const taken=new Set(myR.map(r=>r.examId));
+  const pending=exams.filter(e=>!taken.has(e.id));
+  const anns=DB.col('announcements').all().reverse().slice(0,3);
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">Hello, ${esc(S.user.name.split(' ')[0])} 👋</div><div class="ps">${fDate(today)}</div></div></div>
+    <div class="sg">
+      ${sc('📅',pct===null?'var(--bg)':pct>=75?'var(--ok-l)':pct>=50?'var(--warn-l)':'var(--err-l)',pct!==null?pct+'%':'—','Attendance (30d)',pct===null?'No records':pct>=75?'Good Standing':pct>=50?'Needs Improvement':'Critical',pct>=75?'var(--ok)':pct>=50?'var(--warn)':'var(--err)')}
+      ${sc('📝','var(--pri-l)',pending.length,'Pending Exams',myR.length+' completed','var(--pri2)')}
+      ${sc('🏆','var(--ok-l)',myR.filter(r=>r.passed).length,'Passed',myR.length?Math.round(myR.filter(r=>r.passed).length/myR.length*100)+'% rate':'—','var(--ok)')}
+      ${sc('🎯',!todayAtt?'var(--warn-l)':todayAtt==='P'?'var(--ok-l)':'var(--err-l)',!todayAtt?'—':todayAtt,'Today',!todayAtt?'Not marked yet':todayAtt==='P'?'Present':'Absent',todayAtt==='P'?'var(--ok)':'var(--err)')}
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="ch"><div class="ct">📝 Pending Exams</div><button class="btn btn-out btn-sm" onclick="go('exams')">All</button></div>
+        <div class="cb">${pending.length?pending.slice(0,3).map(ex=>`<div style="display:flex;align-items:center;gap:.75rem;padding:.6rem 0;border-bottom:1px solid var(--border)"><div style="flex:1"><div class="fw6 txt-sm">${esc(ex.title)}</div><div class="txt-xs txt-muted">${ex.questions?.length||0} Qs · ${ex.duration} min</div></div><button class="btn btn-pri btn-sm" onclick="startExam('${ex.id}')">Start</button></div>`).join(''):'<div class="empty" style="padding:1rem 0"><div class="empty-ico">✅</div><div class="empty-txt">All done!</div></div>'}
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch"><div class="ct">📢 Announcements</div></div>
+        <div class="cb">${anns.map(a=>`<div class="ann-item mb1"><div class="ann-bar" style="background:${a.pri==='high'?'var(--err)':a.pri==='med'?'var(--warn)':'var(--ok)'}"></div><div><div class="fw6 txt-sm">${esc(a.title)}</div><div class="txt-xs txt-muted">${esc(a.content.slice(0,60))}…</div></div></div>`).join('')||'<div class="txt-sm txt-muted">No announcements</div>'}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// PARENT DASHBOARD
+// ═══════════════════════════════════════════════
+function pDash(){
+  const parent=S.user;
+  const stu=DB.col('students').one(s=>s.id===parent.studentId);
+  if(!stu){document.getElementById('page').innerHTML='<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-txt">Student not linked</div></div>';return;}
+  const pct=ATT.pct(stu.id,30);
+  const today=ds_fmt();const todayAtt=ATT.g(today)[stu.id];
+  const myR=DB.col('results').find(r=>r.studentId===stu.id);
+  const fees=DB.col('fees').find(f=>f.studentId===stu.id);
+  const pending=fees.filter(f=>f.status==='pending');
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">Parent Dashboard</div><div class="ps">Child: <strong>${esc(stu.name)}</strong> · Roll: ${esc(stu.roll)}</div></div></div>
+    <div class="sg">
+      ${sc('📅',pct>=75?'var(--ok-l)':pct>=50?'var(--warn-l)':'var(--err-l)',pct!==null?pct+'%':'—','Attendance',pct>=75?'Good':pct>=50?'Average':'Low',pct>=75?'var(--ok)':pct>=50?'var(--warn)':'var(--err)')}
+      ${sc('🎯',!todayAtt?'var(--warn-l)':todayAtt==='P'?'var(--ok-l)':'var(--err-l)',!todayAtt?'—':todayAtt,'Today',!todayAtt?'Not marked':todayAtt==='P'?'Present':'Absent','var(--text)')}
+      ${sc('📝','var(--pri-l)',myR.length,'Exams Taken',myR.filter(r=>r.passed).length+' passed','var(--pri2)')}
+      ${sc('💰',pending.length?'var(--err-l)':'var(--ok-l)',pending.length?'₹'+pending.reduce((a,f)=>a+f.amount,0).toLocaleString():'All Paid','Fees Pending',pending.length+' pending',pending.length?'var(--err)':'var(--ok)')}
+    </div>
+    <div class="card mt2">
+      <div class="ch"><div class="ct">📊 Recent Results</div></div>
+      ${myR.length?`<div class="tw" style="border:none"><table><thead><tr><th>Exam</th><th>Score</th><th>Status</th></tr></thead><tbody>
+        ${myR.slice(-5).reverse().map(r=>{const ex=DB.col('exams').one(e=>e.id===r.examId);const pct2=r.total>0?Math.round(r.score/r.total*100):0;return`<tr><td class="fw6">${esc(ex?.title||'—')}</td><td style="font-family:var(--mono);font-weight:700">${r.score}/${r.total}</td><td><span class="b ${r.passed?'bok':'berr'}">${r.passed?'Pass':'Fail'} ${pct2}%</span></td></tr>`;}).join('')}
+      </tbody></table></div>`:'<div class="cb empty"><div class="empty-ico">📝</div><div class="empty-txt">No results yet</div></div>'}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// EXAM CELL DASHBOARD
+// ═══════════════════════════════════════════════
+function eDash(){
+  const off=DB.col('offline-exams').all();
+  const res=DB.col('offline-results').all();
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">Examination Cell</div><div class="ps">Manage offline exams & OMR results</div></div></div>
+    <div class="sg">
+      ${sc('📋','var(--pri-l)',off.length,'Offline Exams','Created','var(--pri2)')}
+      ${sc('📊','var(--ok-l)',res.length,'Results Entered','Total entries','var(--ok)')}
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="ch"><div class="ct">📋 Recent Offline Exams</div><button class="btn btn-pri btn-sm" onclick="go('offline-exams')">Manage</button></div>
+        <div class="cb">${off.slice(-4).reverse().map(e=>`<div style="padding:.5rem 0;border-bottom:1px solid var(--border)"><div class="fw6 txt-sm">${esc(e.title)}</div><div class="txt-xs txt-muted">${esc(e.subject)} · ${fDate(e.date)}</div></div>`).join('')||'<div class="empty-txt txt-muted txt-sm">No offline exams</div>'}
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch"><div class="ct">📝 Enter OMR Results</div><button class="btn btn-acc btn-sm" onclick="go('enter-results')">Enter</button></div>
+        <div class="cb"><div class="txt-sm txt-muted">Select an offline exam and enter results for each student after OMR sheet checking.</div></div>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// STUDENTS (TEACHER)
+// ═══════════════════════════════════════════════
+let _ss='',_sb='';
+function tStudents(){
+  const batches=[...new Set(DB.col('students').all().map(s=>s.batch).filter(Boolean))];
+  document.getElementById('page').innerHTML=`
+    <div class="ph">
+      <div><div class="pt">Students</div><div class="ps">${DB.col('students').cnt()} registered</div></div>
+      <button class="btn btn-pri" onclick="openAddStu()">+ Add Student</button>
+    </div>
+    <div style="display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:1rem">
+      <input class="fc" style="max-width:260px" placeholder="Search name or roll…" oninput="_ss=this.value;rStuT()" value="${esc(_ss)}">
+      <select class="fc" style="width:160px" onchange="_sb=this.value;rStuT()">
+        <option value="">All Batches</option>${batches.map(b=>`<option ${_sb===b?'selected':''}>${b}</option>`).join('')}
+      </select>
+    </div>
+    <div id="stu-wrap"></div>`;
+  rStuT();
+}
+
+function rStuT(){
+  let rows=DB.col('students').all();
+  if(_ss)rows=rows.filter(s=>s.name.toLowerCase().includes(_ss.toLowerCase())||s.roll.includes(_ss));
+  if(_sb)rows=rows.filter(s=>s.batch===_sb);
+  const el=document.getElementById('stu-wrap');if(!el)return;
+  if(!rows.length){el.innerHTML='<div class="empty"><div class="empty-ico">👥</div><div class="empty-txt">No students found</div></div>';return;}
+  el.innerHTML=`<div class="tw"><table><thead><tr><th>#</th><th>Student</th><th>Roll No</th><th>Batch</th><th>Parent</th><th>Attendance</th><th>Actions</th></tr></thead><tbody>
+    ${rows.map((s,i)=>{
+      const pct=ATT.pct(s.id);
+      const pc=pct===null?null:pct>=75?'var(--ok)':pct>=50?'var(--warn)':'var(--err)';
+      return`<tr><td class="txt-xs txt-muted">${i+1}</td>
+        <td><div style="display:flex;align-items:center;gap:.5rem"><div class="sb-av" style="width:28px;height:28px;font-size:.65rem;background:${avCol(s.name)}">${avIn(s.name)}</div><div><div class="fw6">${esc(s.name)}</div><div class="txt-xs txt-muted">${esc(s.phone||'')}</div></div></div></td>
+        <td style="font-family:var(--mono);font-size:.78rem;font-weight:600">${esc(s.roll)}</td>
+        <td><span class="b bpri">${esc(s.batch||'—')}</span></td>
+        <td class="txt-sm txt-muted">${esc(s.parentName||'—')}</td>
+        <td>${pc?`<div style="display:flex;align-items:center;gap:.4rem">${pbar(pct,pc)}<span class="txt-xs fw6" style="color:${pc}">${pct}%</span></div>`:'<span class="txt-xs txt-muted">—</span>'}</td>
+        <td><div style="display:flex;gap:.3rem">
+          <button class="btn btn-out btn-sm btn-ico" onclick="openAddStu('${s.id}')" title="Edit">✎</button>
+          <button class="btn btn-err btn-sm btn-ico" onclick="delStu('${s.id}')" title="Delete">✕</button>
+        </div></td>
+      </tr>`;}).join('')}
+  </tbody></table></div>`;
+}
+
+function openAddStu(id){
+  const s=id?DB.col('students').one(r=>r.id===id):{};
+  const batches=['JEE-11','JEE-12','NEET-11','NEET-12','Foundation-9','Foundation-10'];
+  OM(id?'Edit Student':'Add Student',`
+    <div class="fgrid">
+      <div class="fg full"><label>Full Name *</label><input class="fc" id="s-nm" value="${esc(s.name||'')}"></div>
+      <div class="fg"><label>Roll Number *</label><input class="fc" id="s-roll" value="${esc(s.roll||'')}" ${id?'readonly style="opacity:.6"':''}></div>
+      <div class="fg"><label>Batch</label><select class="fc" id="s-bt">${batches.map(b=>`<option ${(s.batch||'')==b?'selected':''}>${b}</option>`).join('')}</select></div>
+      <div class="fg"><label>Phone</label><input class="fc" id="s-ph" value="${esc(s.phone||'')}"></div>
+      <div class="fg"><label>Parent Name</label><input class="fc" id="s-pnm" value="${esc(s.parentName||'')}"></div>
+      <div class="fg"><label>Parent Phone</label><input class="fc" id="s-pph" value="${esc(s.parentPhone||'')}"></div>
+      <div class="fg full"><label>Date of Birth</label><input class="fc" type="date" id="s-dob" value="${esc(s.dob||'')}"></div>
+    </div>
+    ${id?'':`<div class="fhint">Default password: 1234 (student can change later)</div>`}`,
+    [{l:'Cancel',fn:'CM()'},{l:id?'Update':'Add Student',fn:`saveStu('${id||''}')`,c:'btn-pri'}]
+  );
+}
+
+function saveStu(id){
+  const name=document.getElementById('s-nm').value.trim();
+  const roll=id?DB.col('students').one(r=>r.id===id)?.roll:document.getElementById('s-roll').value.trim();
+  if(!name||!roll){toast('Name & Roll required','err');return;}
+  if(!id&&DB.col('students').one(s=>s.roll===roll)){toast('Roll number already exists','err');return;}
+  const data={name,roll,batch:document.getElementById('s-bt').value,phone:document.getElementById('s-ph').value.trim(),parentName:document.getElementById('s-pnm').value.trim(),parentPhone:document.getElementById('s-pph').value.trim(),dob:document.getElementById('s-dob').value};
+  if(id){DB.col('students').upd(id,data);toast('Updated','ok');}
+  else{DB.col('students').ins({...data,pwd:'1234'});toast('Student added','ok');}
+  CM();tStudents();
+}
+
+function delStu(id){
+  const s=DB.col('students').one(r=>r.id===id);
+  if(!s||!confirm(`Delete "${s.name}"?`))return;
+  DB.col('students').del(id);toast('Deleted','ok');tStudents();
+}
+
+// ═══════════════════════════════════════════════
+// ATTENDANCE
+// ═══════════════════════════════════════════════
+function tAtt(){
+  const lbl=fDate(S.attDate);
+  document.getElementById('page').innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1rem">
+      <div><div class="pt">Attendance</div><div class="ps">${lbl}</div></div>
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <button class="btn btn-out btn-sm" onclick="chAttDate(-1)">←</button>
+        <input type="date" class="fc" style="width:auto" value="${S.attDate}" onchange="S.attDate=this.value;tAtt()">
+        <button class="btn btn-out btn-sm" onclick="chAttDate(1)">→</button>
+      </div>
+    </div>
+    <div id="att-sum" class="g3" style="margin-bottom:1rem"></div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.85rem">
+      <button class="btn btn-ok btn-sm" onclick="markAll('P')">✓ All Present</button>
+      <button class="btn btn-err btn-sm" onclick="markAll('A')">✗ All Absent</button>
+      <button class="btn btn-out btn-sm" onclick="importBio()">📡 Import Biometric CSV</button>
+    </div>
+    <div id="att-list"></div>`;
+  rAttSum();rAttList();
+}
+
+function rAttSum(){
+  const el=document.getElementById('att-sum');if(!el)return;
+  const total=DB.col('students').cnt();
+  const att=ATT.g(S.attDate);
+  const p=Object.values(att).filter(v=>v==='P').length;
+  const a=Object.values(att).filter(v=>v==='A').length;
+  const u=total-p-a;
+  el.innerHTML=`
+    <div class="sc"><div class="si" style="background:var(--ok-l)">✓</div><div><div class="sv" style="color:var(--ok)">${p}</div><div class="sl">Present</div></div></div>
+    <div class="sc"><div class="si" style="background:var(--err-l)">✕</div><div><div class="sv" style="color:var(--err)">${a}</div><div class="sl">Absent</div></div></div>
+    <div class="sc"><div class="si" style="background:var(--warn-l)">?</div><div><div class="sv" style="color:var(--warn)">${u}</div><div class="sl">Unmarked</div></div></div>`;
+}
+
+function rAttList(){
+  const el=document.getElementById('att-list');if(!el)return;
+  const students=DB.col('students').all();
+  if(!students.length){el.innerHTML='<div class="empty"><div class="empty-ico">👥</div><div class="empty-txt">No students yet</div></div>';return;}
+  const att=ATT.g(S.attDate);
+  el.innerHTML=students.map(s=>{
+    const st=att[s.id]||'';
+    return`<div class="arow" id="arow-${s.id}">
+      <div class="aav" style="background:${avCol(s.name)}">${avIn(s.name)}</div>
+      <div><div class="an">${esc(s.name)}</div><div class="ar">${esc(s.roll)} · ${esc(s.batch||'')}</div></div>
+      <div class="atg">
+        <button class="at P ${st==='P'?'on':''}" onclick="mAtt('${s.id}','P',this)">P</button>
+        <button class="at A ${st==='A'?'on':''}" onclick="mAtt('${s.id}','A',this)">A</button>
+        <button class="at L ${st==='L'?'on':''}" onclick="mAtt('${s.id}','L',this)">L</button>
+      </div>
+    </div>`;}).join('');
+}
+
+function mAtt(sid,st,btn){
+  ATT.mark(S.attDate,sid,st);
+  const row=document.getElementById('arow-'+sid);
+  if(row)row.querySelectorAll('.at').forEach(b=>{b.classList.toggle('on',b.classList.contains(st));});
+  rAttSum();
+}
+
+function markAll(st){DB.col('students').all().forEach(s=>ATT.mark(S.attDate,s.id,st));rAttList();rAttSum();toast('Marked all '+st,'ok');}
+function chAttDate(d){const dt=new Date(S.attDate+'T00:00:00');dt.setDate(dt.getDate()+d);S.attDate=ds_fmt(dt);tAtt();}
+
+function importBio(){
+  OM('Import Biometric CSV',`
+    <div style="background:var(--pri-l);border-radius:var(--r);padding:.85rem;color:var(--pri);font-size:.82rem;margin-bottom:1rem">📡 CSV format: RollNo, Date (YYYY-MM-DD), Status (P/A/L)</div>
+    <div class="fg"><label>Upload CSV File</label><input type="file" class="fc" accept=".csv" onchange="parseBioCSV(this)"></div>
+    <div id="bio-res" class="mt1"></div>`,
+    [{l:'Close',fn:'CM()'}]
+  );
+}
+
+function parseBioCSV(input){
+  const file=input.files[0];if(!file)return;
+  const fr=new FileReader();
+  fr.onload=e=>{
+    const lines=e.target.result.split('\n').filter(l=>l.trim());
+    let imp=0;
+    lines.forEach(line=>{
+      const [roll,date,st]=line.split(',').map(s=>s.trim());
+      if(!roll||!date||!st)return;
+      const stu=DB.col('students').one(s=>s.roll===roll);
+      if(stu){ATT.mark(date,stu.id,st.toUpperCase());imp++;}
+    });
+    document.getElementById('bio-res').innerHTML=`<div style="background:var(--ok-l);border-radius:var(--r);padding:.7rem;color:var(--ok);font-size:.82rem">✓ Imported ${imp} records</div>`;
+    rAttSum();rAttList();
+  };
+  fr.readAsText(file);
+}
+
+function sAtt(){
+  const sid=S.user.id;
+  const pct=ATT.pct(sid,30);
+  const hist=ATT.hist(sid,30);
+  const pc=pct>=75?'var(--ok)':pct>=50?'var(--warn)':'var(--err)';
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">My Attendance</div><div class="ps">Last 30 days</div></div></div>
+    <div class="sg" style="grid-template-columns:repeat(3,1fr)">
+      ${sc('✓','var(--ok-l)',hist.filter(r=>r.st==='P').length,'Present','','var(--ok)')}
+      ${sc('✕','var(--err-l)',hist.filter(r=>r.st==='A').length,'Absent','','var(--err)')}
+      ${sc('📊','var(--pri-l)',pct!==null?pct+'%':'—','Attendance','','var(--pri2)')}
+    </div>
+    ${pct!==null?`<div class="card mb2"><div class="cb"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem"><span class="fw6 txt-sm">Overall</span><span class="b ${pct>=75?'bok':pct>=50?'bwarn':'berr'}">${pct>=75?'Good':'Low'}</span></div>${pbar(pct,pc)}<div class="txt-xs txt-muted mt1">Minimum 75% required · Yours: ${pct}%</div></div></div>`:''}
+    <div class="card"><div class="ch"><div class="ct">Day-by-Day Record</div></div>
+      ${hist.length?`<div class="tw" style="border:none;border-radius:0"><table><thead><tr><th>Date</th><th>Status</th></tr></thead><tbody>
+        ${hist.map(r=>`<tr><td>${fDate(r.date)}</td><td><span class="b ${r.st==='P'?'bok':r.st==='A'?'berr':'bwarn'}">${r.st==='P'?'Present':r.st==='A'?'Absent':'Late'}</span></td></tr>`).join('')}
+      </tbody></table></div>`:'<div class="cb empty"><div class="empty-ico">📅</div><div class="empty-txt">No records</div></div>'}
+    </div>`;
+}
+
+function pAtt(){
+  const parent=S.user;const stu=DB.col('students').one(s=>s.id===parent.studentId);
+  if(!stu){document.getElementById('page').innerHTML='<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-txt">No student linked</div></div>';return;}
+  S.user={...parent};
+  const origId=S.user.id;S.user.id=stu.id;sAtt();S.user.id=origId;
+}
+
+// ═══════════════════════════════════════════════
+// EXAMS — TEACHER
+// ═══════════════════════════════════════════════
+function tExams(){
+  const exams=DB.col('exams').all().reverse();
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">Online Exams</div><div class="ps">${exams.length} exams</div></div>
+    <button class="btn btn-pri" onclick="go('create-exam')">+ Create Exam</button></div>
+    ${exams.length?`<div class="tw"><table><thead><tr><th>Title</th><th>Subject</th><th>Dur.</th><th>Qs</th><th>Code</th><th>Subs.</th><th></th></tr></thead><tbody>
+      ${exams.map(ex=>{
+        const res=DB.col('results').find(r=>r.examId===ex.id);
+        return`<tr><td><div class="fw6">${esc(ex.title)}</div><div class="txt-xs txt-muted">${fDate(ds_fmt(new Date(ex._c)))}</div></td>
+          <td class="txt-sm">${esc(ex.subject||'—')}</td><td class="txt-sm">${ex.duration}m</td>
+          <td class="txt-sm">${ex.questions?.length||0}</td>
+          <td style="font-family:var(--mono);font-weight:700;color:var(--pri2);font-size:.82rem">${ex.id.toUpperCase()}</td>
+          <td class="txt-sm">${res.length}</td>
+          <td><div style="display:flex;gap:.3rem">
+            <button class="btn btn-pri btn-sm" onclick="go('results',{examId:'${ex.id}'})">Results</button>
+            <button class="btn btn-err btn-sm btn-ico" onclick="delExam('${ex.id}')">✕</button>
+          </div></td>
+        </tr>`;}).join('')}
+    </tbody></table></div>`
+    :'<div class="empty"><div class="empty-ico">📝</div><div class="empty-txt">No exams yet</div></div>'}`;
+}
+
+function delExam(id){if(!confirm('Delete exam and all results?'))return;DB.col('exams').del(id);DB.s('results',(DB.col('results').find(r=>r.examId!==id)));toast('Deleted','ok');tExams();}
+
+// ═══════════════════════════════════════════════
+// CREATE EXAM
+// ═══════════════════════════════════════════════
+let _bq=[];
+function tCreateExam(){
+  _bq=[];
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">Create Online Exam</div><div class="ps">Fill details and add questions</div></div></div>
+    <div id="ca-alert"></div>
+    <div class="card mb2">
+      <div class="ch"><div class="ct">📋 Exam Details</div></div>
+      <div class="cb">
+        <div class="fgrid">
+          <div class="fg full"><label>Title *</label><input class="fc" id="ex-title" placeholder="e.g. Physics – Laws of Motion Test"></div>
+          <div class="fg"><label>Subject</label><input class="fc" id="ex-sub" placeholder="e.g. Physics"></div>
+          <div class="fg"><label>Duration (min)</label><input class="fc" id="ex-dur" type="number" value="30" min="5"></div>
+          <div class="fg"><label>Marks per Q</label><input class="fc" id="ex-mpq" type="number" value="4" min="1"></div>
+          <div class="fg"><label>Negative Marks</label><input class="fc" id="ex-neg" type="number" value="1" min="0" step="0.25" placeholder="0 = no negative"></div>
+          <div class="fg"><label>Pass % </label><input class="fc" id="ex-pass" type="number" value="40" min="1" max="100"></div>
+          <div class="fg full"><label>Target Batch</label><input class="fc" id="ex-batch" placeholder="e.g. JEE-11 or leave blank for all"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card mb2">
+      <div class="ch"><div class="ct">❓ Questions</div><span class="b bpri" id="qc-badge">0 Qs</span></div>
+      <div class="cb">
+        <div id="q-bld-list"></div>
+        <div class="btn-out" style="display:flex;align-items:center;justify-content:center;gap:.5rem;padding:1rem;border-radius:var(--r);border:1.5px dashed var(--border2);cursor:pointer;color:var(--text2);font-size:.84rem;transition:all .15s" onclick="openAddQ()" onmouseover="this.style.borderColor='var(--pri2)';this.style.color='var(--pri2)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">+ Add Question (MCQ / True-False / Short Answer)</div>
+      </div>
+    </div>
+    <div class="card mb2">
+      <div class="ch"><div class="ct">🔒 Security Settings</div></div>
+      <div class="cb">
+        <div class="fgrid">
+          <div class="fg"><label>Camera Monitoring</label><select class="fc" id="sec-cam"><option value="optional">Optional</option><option value="required">Required</option><option value="off">Off</option></select></div>
+          <div class="fg"><label>On Tab Switch</label><select class="fc" id="sec-tab"><option value="submit">Auto Submit</option><option value="warn">Warn First</option></select></div>
+          <div class="fg"><label>Shuffle Questions</label><select class="fc" id="sec-shuf"><option value="1">Yes (Recommended)</option><option value="0">No</option></select></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:.75rem;justify-content:flex-end">
+      <button class="btn btn-out" onclick="go('exams')">Cancel</button>
+      <button class="btn btn-pri btn-lg" onclick="saveExam()">✓ Create Exam</button>
+    </div>
+    <div id="code-result" style="display:none" class="mt2">
+      <div style="background:var(--pri-l);border:2px solid var(--pri2);border-radius:var(--r-xl);padding:1.35rem;text-align:center">
+        <div style="font-size:.65rem;font-weight:700;color:var(--pri2);letter-spacing:.12em;margin-bottom:.4rem">EXAM CODE — SHARE WITH STUDENTS</div>
+        <div id="code-show" style="font-family:var(--mono);font-size:2.4rem;font-weight:800;color:var(--pri2);letter-spacing:.25em"></div>
+        <div class="txt-sm txt-muted mt1">Students enter this code in the Exams section</div>
+      </div>
+    </div>`;
+}
+
+function openAddQ(){
+  OM('Add Question',`
+    <div class="fg mb1"><label>Type</label><select class="fc" id="qt" onchange="uQForm()"><option value="mcq">MCQ</option><option value="tf">True/False</option><option value="short">Short Answer</option></select></div>
+    <div class="fg mb1"><label>Question Text *</label><textarea class="fc" id="qtxt" placeholder="Type question here..."></textarea></div>
+    <div class="fg mb1"><label>Explanation (optional — shown after result)</label><textarea class="fc" id="qexp" placeholder="Explain the correct answer..."></textarea></div>
+    <div id="qform"><label style="font-size:.75rem;font-weight:600;color:var(--text2)">Options (● = correct answer)</label>
+      <div style="display:flex;flex-direction:column;gap:.45rem;margin-top:.5rem">
+        ${['A','B','C','D'].map((l,i)=>`<div style="display:flex;align-items:center;gap:.5rem"><input type="radio" name="qcor" value="${i}" ${i===0?'checked':''}><span style="font-size:.75rem;font-weight:700;width:18px;text-align:center;color:var(--text2)">${l}</span><input class="fc" id="qo${i}" placeholder="Option ${l}"></div>`).join('')}
+      </div>
+    </div>`,
+    [{l:'Cancel',fn:'CM()'},{l:'Add Question',fn:'addQ()',c:'btn-pri'}]
+  );
+}
+
+function uQForm(){
+  const t=document.getElementById('qt').value;
+  document.getElementById('qform').innerHTML=t==='mcq'?`<label style="font-size:.75rem;font-weight:600;color:var(--text2)">Options (● = correct)</label>
+    <div style="display:flex;flex-direction:column;gap:.45rem;margin-top:.5rem">
+      ${['A','B','C','D'].map((l,i)=>`<div style="display:flex;align-items:center;gap:.5rem"><input type="radio" name="qcor" value="${i}" ${i===0?'checked':''}><span style="font-size:.75rem;font-weight:700;width:18px;text-align:center;color:var(--text2)">${l}</span><input class="fc" id="qo${i}" placeholder="Option ${l}"></div>`).join('')}
+    </div>`:
+    t==='tf'?`<label style="font-size:.75rem;font-weight:600;color:var(--text2)">Correct Answer</label><select class="fc mt1" id="qtf"><option value="True">True</option><option value="False">False</option></select>`:
+    `<div class="fg"><label>Model Answer (teacher reference)</label><textarea class="fc" id="qma"></textarea></div>`;
+}
+
+function addQ(){
+  const type=document.getElementById('qt').value;
+  const text=(document.getElementById('qtxt').value||'').trim();
+  const exp=(document.getElementById('qexp').value||'').trim();
+  if(!text){toast('Question text required','err');return;}
+  const q={type,text,exp};
+  if(type==='mcq'){
+    const opts=[0,1,2,3].map(i=>(document.getElementById('qo'+i)?.value||'').trim());
+    if(opts.some(o=>!o)){toast('All 4 options required','err');return;}
+    q.options=opts;q.correct=parseInt(document.querySelector('input[name=qcor]:checked').value);
+  }else if(type==='tf'){
+    q.correct=document.getElementById('qtf').value;q.options=['True','False'];
+  }else{
+    q.model=document.getElementById('qma')?.value||'';
+  }
+  _bq.push(q);rBuildQ();CM();
+}
+
+function rBuildQ(){
+  const el=document.getElementById('q-bld-list');
+  document.getElementById('qc-badge').textContent=_bq.length+' Qs';
+  if(!el)return;
+  el.innerHTML=_bq.map((q,i)=>`<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:.85rem;display:flex;gap:.75rem;margin-bottom:.5rem">
+    <div style="width:24px;height:24px;background:var(--pri-l);color:var(--pri2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0">Q${i+1}</div>
+    <div style="flex:1"><div class="fw6 txt-sm">${esc(q.text)}</div><div class="txt-xs txt-muted mt1">${q.type.toUpperCase()}${q.type==='mcq'?' · '+q.options.length+' opts':''}</div></div>
+    <button class="btn btn-err btn-sm btn-ico" onclick="rmQ(${i})">✕</button>
+  </div>`).join('');
+}
+
+function rmQ(i){_bq.splice(i,1);rBuildQ();}
+
+function saveExam(){
+  const title=(document.getElementById('ex-title').value||'').trim();
+  if(!title){toast('Title required','err');return;}
+  if(!_bq.length){toast('Add at least 1 question','err');return;}
+  const ex={
+    type:'online',title,
+    subject:(document.getElementById('ex-sub').value||'').trim(),
+    duration:parseInt(document.getElementById('ex-dur').value)||30,
+    mpq:parseInt(document.getElementById('ex-mpq').value)||4,
+    neg:parseFloat(document.getElementById('ex-neg').value)||0,
+    pass:parseInt(document.getElementById('ex-pass').value)||40,
+    batch:(document.getElementById('ex-batch').value||'').trim(),
+    questions:_bq.map((q,i)=>({...q,id:i})),
+    security:{cam:document.getElementById('sec-cam').value,tab:document.getElementById('sec-tab').value,shuffle:document.getElementById('sec-shuf').value==='1'},
+  };
+  const saved=DB.col('exams').ins(ex);
+  document.getElementById('code-show').textContent=saved.id.toUpperCase();
+  document.getElementById('code-result').style.display='block';
+  toast('Exam created!','ok');
+}
+
+// ═══════════════════════════════════════════════
+// STUDENT EXAMS + SECURE EXAM TAKING
+// ═══════════════════════════════════════════════
+function sExams(){
+  const sid=S.user.id;
+  const allEx=DB.col('exams').find(e=>e.type==='online');
+  const myR=DB.col('results').find(r=>r.studentId===sid);
+  const taken=new Set(myR.map(r=>r.examId));
+  const pending=allEx.filter(e=>!taken.has(e.id));
+  const done=allEx.filter(e=>taken.has(e.id));
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">My Exams</div><div class="ps">${pending.length} pending · ${done.length} done</div></div></div>
+    ${pending.length?`<div class="card mb2">
+      <div class="ch"><div class="ct">📝 Available Exams</div></div>
+      <div class="cb" style="display:grid;gap:.65rem">
+        ${pending.map(ex=>`<div style="display:flex;align-items:center;gap:.85rem;padding:.75rem;background:var(--bg);border-radius:var(--r);border:1px solid var(--border)">
+          <div style="flex:1"><div class="fw7">${esc(ex.title)}</div><div class="txt-xs txt-muted mt1">${esc(ex.subject||'')} · ${ex.questions?.length} Qs · ${ex.duration} min · Pass: ${ex.pass||40}%</div></div>
+          <button class="btn btn-pri" onclick="startExam('${ex.id}')">Start →</button>
+        </div>`).join('')}
+      </div></div>`:''}
+    ${done.length?`<div class="card">
+      <div class="ch"><div class="ct">✅ Completed</div></div>
+      <div class="tw" style="border:none"><table><thead><tr><th>Exam</th><th>Score</th><th>Status</th><th>Review</th></tr></thead><tbody>
+        ${done.map(ex=>{const r=myR.find(r=>r.examId===ex.id);const pct=r&&r.total>0?Math.round(r.score/r.total*100):0;return`<tr><td class="fw6">${esc(ex.title)}</td><td style="font-family:var(--mono);font-weight:700">${r?.score||0}/${r?.total||0}</td><td><span class="b ${r?.passed?'bok':'berr'}">${r?.passed?'Pass':'Fail'} ${pct}%</span></td><td><button class="btn btn-pri btn-sm" onclick="go('exam-review',{resultId:'${r?.id}'})">Review</button></td></tr>`;}).join('')}
+      </tbody></table></div></div>`:''}
+    ${!pending.length&&!done.length?'<div class="empty"><div class="empty-ico">📝</div><div class="empty-txt">No exams available</div></div>':''}`;
+}
+
+// ──── Exam Taking ────
+let ES={};
+function startExam(examId){
+  const exam=DB.col('exams').one(e=>e.id===examId);
+  if(!exam){toast('Exam not found','err');return;}
+  if(DB.col('results').one(r=>r.examId===examId&&r.studentId===S.user.id)){toast('Already completed','err');return;}
+  
+  // Build shuffled order
+  const shuffle=exam.security?.shuffle!==false;
+  const qIndices=Array.from({length:exam.questions.length},(_,i)=>i);
+  const seed=S.user.id+':'+examId;
+  const shuffledQIdx=shuffle?seededShuffle(qIndices,seed):qIndices;
+  
+  // For each MCQ, shuffle options too
+  const shuffledOptIdx=exam.questions.map((q,qi)=>{
+    if(q.type!=='mcq')return null;
+    const optIdx=Array.from({length:q.options.length},(_,i)=>i);
+    return shuffle?seededShuffle(optIdx,seed+'_o'+qi):optIdx;
+  });
+
+  ES={
+    examId,shuffle,shuffledQIdx,shuffledOptIdx,
+    answers:{},flags:{},secEvents:[],
+    currentQ:0,timer:null,camInterval:null,stream:null,
+    fsWarnings:0,submitted:false,
+    startTime:Date.now()
+  };
+
+  document.getElementById('ex-t').textContent=exam.title;
+  document.getElementById('ex-sn').textContent=S.user.name+' · '+S.user.roll;
+  buildPalette(exam.questions.length);
+  renderEQ(0);
+  startTimer(exam.duration);
+  initSecurity(exam);
+  document.documentElement.requestFullscreen().catch(()=>{});
+  document.getElementById('exscreen').classList.add('on');
+}
+
+function buildPalette(n){
+  document.getElementById('ex-pal').innerHTML=Array.from({length:n},(_,i)=>`<button class="ep" id="ep-${i}" onclick="renderEQ(${i})">${i+1}</button>`).join('');
+}
+
+function renderEQ(idx){
+  const exam=DB.col('exams').one(e=>e.id===ES.examId);
+  ES.currentQ=idx;
+  const total=exam.questions.length;
+  // Get original question index from shuffle map
+  const origIdx=ES.shuffledQIdx[idx];
+  const q=exam.questions[origIdx];
+  
+  document.querySelectorAll('.ep').forEach((b,i)=>{
+    b.className='ep'+(ES.answers[i]!==undefined?' done':'')+(ES.flags[i]?' flag':'')+(i===idx?' cur':'');
+  });
+  document.getElementById('ex-pf').style.width=((idx+1)/total*100)+'%';
+  document.getElementById('ex-pos').textContent=`Q ${idx+1} of ${total}`;
+  document.getElementById('ex-prev').disabled=idx===0;
+  document.getElementById('ex-next').textContent=idx===total-1?'Review':'Next →';
+
+  let html=`<div class="ex-qcard">
+    <div class="ex-qhead"><div class="ex-qn">${idx+1}</div>
+    <span class="ex-qt-badge">${q.type==='mcq'?'MCQ':q.type==='tf'?'T/F':'Short'}</span>
+    <span class="ex-qmk">${exam.mpq||4} marks${exam.neg>0?' | -'+exam.neg:''}</span></div>
+    <div class="ex-qtxt">${esc(q.text)}</div>`;
+
+  if(q.type==='mcq'){
+    // Get shuffled option order for this question
+    const optOrder=ES.shuffledOptIdx[origIdx]||q.options.map((_,i)=>i);
+    html+=`<div class="ex-opts">`;
+    optOrder.forEach((origOptIdx,visIdx)=>{
+      const opt=q.options[origOptIdx];
+      // Store answer as original option index
+      const sel=ES.answers[idx]===origOptIdx;
+      html+=`<button class="ex-opt ${sel?'sel':''}" onclick="pickAns(${idx},${origOptIdx})">
+        <div class="ex-ok">${'ABCD'[visIdx]}</div>
+        <span class="ex-otxt">${esc(opt)}</span>
+      </button>`;
+    });
+    html+=`</div>`;
+  }else if(q.type==='tf'){
+    ['True','False'].forEach(opt=>{
+      const sel=ES.answers[idx]===opt;
+      html+=`<button class="ex-opt ${sel?'sel':''}" onclick="pickAns(${idx},'${opt}')"><div class="ex-ok">${opt[0]}</div><span class="ex-otxt">${opt}</span></button>`;
+    });
+  }else{
+    html+=`<textarea class="ex-short" placeholder="Type answer here..." oninput="pickAns(${idx},this.value)">${esc(ES.answers[idx]||'')}</textarea>`;
+  }
+  html+=`</div>
+  <div style="display:flex;justify-content:space-between;margin-top:.75rem">
+    <button class="btn ${ES.flags[idx]?'btn-warn':'btn-out'} btn-sm" onclick="toggleFlag(${idx})">🚩 ${ES.flags[idx]?'Flagged':'Flag for Review'}</button>
+    <button class="btn btn-out btn-sm" onclick="clearAns(${idx})">Clear Answer</button>
+  </div>`;
+  document.getElementById('ex-qr').innerHTML=html;
+}
+
+function pickAns(qi,val){
+  ES.answers[qi]=val;
+  const ep=document.getElementById('ep-'+qi);
+  if(ep)ep.className='ep done'+(qi===ES.currentQ?' cur':'')+(ES.flags[qi]?' flag':'');
+  // Re-render to reflect selection without flicker
+  renderEQ(qi);
+}
+
+function clearAns(qi){delete ES.answers[qi];renderEQ(qi);}
+function toggleFlag(qi){ES.flags[qi]=!ES.flags[qi];renderEQ(qi);}
+function eNav(d){const exam=DB.col('exams').one(e=>e.id===ES.examId);const n=ES.currentQ+d;if(n>=0&&n<exam.questions.length)renderEQ(n);}
+
+function startTimer(dur){
+  let left=dur*60;
+  const el=document.getElementById('ex-timer');
+  const tick=()=>{
+    const m=Math.floor(left/60),s=left%60;
+    el.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    if(left<=300)el.classList.add('red');
+    if(left<=0){submitExam(true,'time_up');return;}
+    left--;
+  };
+  tick();ES.timer=setInterval(tick,1000);
+}
+
+function initSecurity(exam){
+  history.pushState(null,'',location.href);
+  window._epop=()=>{history.pushState(null,'',location.href);if(!ES.submitted)secEv('back','🔒 Back Button','Exam submitted.',true);};
+  window.addEventListener('popstate',window._epop);
+  window._evis=()=>{if(document.hidden&&!ES.submitted)secEv('tab_switch','⚠️ Tab Switch!','Submitting exam.',true);};
+  document.addEventListener('visibilitychange',window._evis);
+  window._efs=()=>{if(!document.fullscreenElement&&!ES.submitted){ES.fsWarnings++;if(ES.fsWarnings>=2)secEv('fs_exit','⚠️ Fullscreen Exit','Exam submitted.',true);else showSecOv('⚠️','Fullscreen Warning','Exit fullscreen again = auto submit.',()=>document.documentElement.requestFullscreen().catch(()=>{}));}};
+  document.addEventListener('fullscreenchange',window._efs);
+  window._ekey=e=>{
+    if(['F12','F11','F5','PrintScreen'].includes(e.key))e.preventDefault();
+    if(e.ctrlKey&&['c','a','u','p','s'].includes(e.key.toLowerCase()))e.preventDefault();
+  };
+  document.addEventListener('keydown',window._ekey);
+  window._ecm=e=>{if(document.getElementById('exscreen').classList.contains('on'))e.preventDefault();};
+  document.addEventListener('contextmenu',window._ecm);
+  ['copy','paste','cut'].forEach(ev=>{window['_e'+ev]=e=>{if(document.getElementById('exscreen').classList.contains('on')){e.preventDefault();ES.secEvents.push(ev);}};document.addEventListener(ev,window['_e'+ev]);});
+  // Camera
+  if(exam.security?.cam!=='off'){
+    navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}}).then(stream=>{
+      ES.stream=stream;let lastBr=null,pw=0;
+      const cv=document.createElement('canvas');cv.width=80;cv.height=60;const ctx=cv.getContext('2d');
+      const vid=document.createElement('video');vid.srcObject=stream;vid.autoplay=true;vid.muted=true;vid.play();
+      ES.camInterval=setInterval(()=>{
+        if(ES.submitted)return;
+        try{ctx.drawImage(vid,0,0,80,60);const d=ctx.getImageData(0,0,80,60).data;let tot=0,br=0;
+          for(let i=0;i<d.length;i+=4){const b=d[i]*.3+d[i+1]*.59+d[i+2]*.11;tot+=b;if(b>210)br++;}
+          const avg=tot/(d.length/4),ratio=br/(d.length/4);
+          if(lastBr!==null&&((avg-lastBr>40&&ratio>.15)||ratio>.35)){pw++;ES.secEvents.push('phone_detected');
+            if(pw>=2)secEv('phone','📵 Device Detected','Another device seen twice. Exam cancelled.',true);
+            else showSecOv('📵','Device Detected!',`Remove phone from camera view. (${pw}/2) next = cancel.`,null);}
+          lastBr=avg;
+        }catch(x){}
+      },4000);
+    }).catch(()=>{});
+  }
+}
+
+function secEv(type,title,msg,sub){ES.secEvents.push(type);if(sub&&!ES.submitted)submitExam(true,type);else if(!sub)showSecOv('⚠️',title,msg,null);}
+function showSecOv(ico,title,msg,onOk){
+  document.getElementById('ex-sec-ico').textContent=ico;
+  document.getElementById('ex-sec-ttl').textContent=title;
+  document.getElementById('ex-sec-msg').textContent=msg;
+  document.getElementById('ex-sec-ov').classList.add('on');
+  document.getElementById('ex-sec-btn').onclick=()=>{document.getElementById('ex-sec-ov').classList.remove('on');if(onOk)onOk();};
+}
+
+function confirmSub(){if(confirm('Submit exam now? Cannot undo.'))submitExam(false,'manual');}
+
+function submitExam(forced,reason){
+  if(ES.submitted)return;ES.submitted=true;
+  clearInterval(ES.timer);clearInterval(ES.camInterval);
+  if(ES.stream)ES.stream.getTracks().forEach(t=>t.stop());
+  try{document.removeEventListener('visibilitychange',window._evis);document.removeEventListener('fullscreenchange',window._efs);document.removeEventListener('keydown',window._ekey);document.removeEventListener('contextmenu',window._ecm);window.removeEventListener('popstate',window._epop);['copy','paste','cut'].forEach(ev=>document.removeEventListener(ev,window['_e'+ev]));}catch(x){}
+  if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});
+  document.getElementById('ex-sec-ov').classList.remove('on');
+
+  const exam=DB.col('exams').one(e=>e.id===ES.examId);
+  let score=0,correct=0,wrong=0,skipped=0;
+  const answerLog=[];
+  exam.questions.forEach((q,origIdx)=>{
+    const visIdx=ES.shuffledQIdx.indexOf(origIdx);
+    const ans=ES.answers[visIdx];
+    let st='skip';
+    if(ans===undefined||ans===''){skipped++;}
+    else if(q.type==='mcq'){if(ans===q.correct){score+=exam.mpq||4;correct++;st='correct';}else{score-=(exam.neg||0);wrong++;st='wrong';}}
+    else if(q.type==='tf'){if(ans===q.correct){score+=exam.mpq||4;correct++;st='correct';}else{score-=(exam.neg||0);wrong++;st='wrong';}}
+    else{skipped++;}
+    answerLog.push({origIdx,visIdx,ans,st});
+  });
+  score=Math.max(0,score);
+  const total=exam.questions.filter(q=>q.type!=='short').length*(exam.mpq||4);
+  const pct=total>0?Math.round(score/total*100):0;
+  const passed=pct>=(exam.pass||40);
+  const result=DB.col('results').ins({examId:ES.examId,studentId:S.user.id,sName:S.user.name,sRoll:S.user.roll,score,total,pct,passed,correct,wrong,skipped,secEvents:[...new Set(ES.secEvents)],answerLog,reason});
+  
+  document.getElementById('exscreen').classList.remove('on');
+  go('exam-review',{resultId:result.id,justSubmitted:true});
+}
+
+// ═══════════════════════════════════════════════
+// EXAM REVIEW PAGE
+// ═══════════════════════════════════════════════
+function pgReview(){
+  const {resultId,justSubmitted}=S.params;
+  const result=DB.col('results').one(r=>r.id===resultId);
+  if(!result){go('exams');return;}
+  const exam=DB.col('exams').one(e=>e.id===result.examId);
+  const pct=result.pct;
+  document.getElementById('page').innerHTML=`
+    <div style="max-width:600px;margin:0 auto">
+      <div style="text-align:center;padding:2rem 0 1.5rem">
+        <div class="rs-circle ${result.passed?'pass':'fail'}">
+          <div class="rs-pct">${pct}%</div>
+          <div class="rs-lbl">${result.passed?'PASS':'FAIL'}</div>
+        </div>
+        <div style="font-size:1.2rem;font-weight:800;margin-bottom:.25rem">${result.passed?'🎉 Congratulations!':'📚 Keep Practicing!'}</div>
+        <div class="txt-muted txt-sm">${esc(exam?.title||'')}</div>
+      </div>
+      <div class="sg" style="grid-template-columns:repeat(3,1fr);margin-bottom:1.5rem">
+        ${sc('✓','var(--ok-l)',result.correct,'Correct','','var(--ok)')}
+        ${sc('✕','var(--err-l)',result.wrong,'Wrong','','var(--err)')}
+        ${sc('—','var(--bg)',result.skipped,'Skipped','','var(--text2)')}
+      </div>
+      ${result.secEvents?.length?`<div style="background:var(--warn-l);border:1px solid rgba(217,119,6,.2);border-radius:var(--r);padding:.85rem;margin-bottom:1rem">
+        <div class="fw7 txt-sm" style="color:var(--warn);margin-bottom:.35rem">⚠️ Security Events</div>
+        ${[...new Set(result.secEvents)].map(e=>`<span class="b bwarn" style="margin:.15rem">${e.replace(/_/g,' ')}</span>`).join('')}
+      </div>`:`<div style="background:var(--ok-l);border-radius:var(--r);padding:.7rem;margin-bottom:1rem;font-size:.8rem;color:var(--ok)">✓ Clean exam — No violations</div>`}
+      <div class="card">
+        <div class="ch"><div class="ct">📋 Question Review</div><span class="txt-xs txt-muted">Tap each question to review</span></div>
+        <div class="cb">
+          ${exam?.questions?.map((q,origIdx)=>{
+            const log=result.answerLog?.find(l=>l.origIdx===origIdx);
+            const st=log?.st||'skip';
+            const studentAns=log?.ans;
+            let optHtml='';
+            if(q.type==='mcq'){
+              q.options.forEach((opt,oi)=>{
+                const isCorrect=oi===q.correct;
+                const isChosen=studentAns===oi;
+                let cls='rv-opt';
+                if(isCorrect)cls+=' correct';
+                else if(isChosen&&!isCorrect)cls+=' wrong-chosen';
+                optHtml+=`<div class="${cls}">${'ABCD'[oi]}. ${esc(opt)}${isCorrect?' ✓ Correct':''}${isChosen&&!isCorrect?' ← Your answer':''}</div>`;
+              });
+            }else if(q.type==='tf'){
+              ['True','False'].forEach(opt=>{
+                const isCorrect=opt===q.correct;const isChosen=studentAns===opt;
+                let cls='rv-opt';if(isCorrect)cls+=' correct';else if(isChosen&&!isCorrect)cls+=' wrong-chosen';
+                optHtml+=`<div class="${cls}">${opt}${isCorrect?' ✓':''}${isChosen&&!isCorrect?' ← Your ans':''}</div>`;
+              });
+            }else{optHtml=`<div class="rv-opt" style="background:var(--bg)"><strong>Your answer:</strong> ${esc(studentAns||'(skipped)')}</div>${q.model?`<div class="rv-opt correct">Model: ${esc(q.model)}</div>`:''}`;
+            }
+            return`<div class="rv-q">
+              <div class="rv-qhead">
+                <span class="rv-num">Q${origIdx+1}</span>
+                <span class="rv-status ${st}">${st==='correct'?'✓ Correct':st==='wrong'?'✗ Wrong':'— Skipped'}</span>
+                ${st==='correct'?`<span class="txt-xs txt-muted" style="margin-left:auto">+${exam.mpq||4}</span>`:st==='wrong'&&exam.neg>0?`<span class="txt-xs" style="color:var(--err);margin-left:auto">-${exam.neg}</span>`:''}
+              </div>
+              <div class="rv-qtxt">${esc(q.text)}</div>
+              ${optHtml}
+              ${q.exp?`<div class="rv-exp">💡 ${esc(q.exp)}</div>`:''}
+            </div>`;
+          }).join('')||''}
+        </div>
+      </div>
+      <div style="display:flex;gap:.75rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap">
+        <button class="btn btn-pri btn-lg" onclick="go('dashboard')">← Dashboard</button>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// RESULTS
+// ═══════════════════════════════════════════════
+function tResults(){
+  const examId=S.params?.examId;
+  const exams=DB.col('exams').all();
+  let results=DB.col('results').all();
+  if(examId)results=results.filter(r=>r.examId===examId);
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">Results</div><div class="ps">${results.length} submissions</div></div>
+      <select class="fc" style="width:200px" onchange="go('results',{examId:this.value||undefined})">
+        <option value="">All Exams</option>${exams.map(e=>`<option value="${e.id}" ${e.id===examId?'selected':''}>${esc(e.title)}</option>`).join('')}
+      </select>
+    </div>
+    ${results.length?`<div class="tw"><table><thead><tr><th>#</th><th>Student</th><th>Exam</th><th>Score</th><th>%</th><th>Status</th><th>Security</th><th>Time</th></tr></thead><tbody>
+      ${results.map((r,i)=>{
+        const ex=DB.col('exams').one(e=>e.id===r.examId);
+        const st=DB.col('students').one(s=>s.id===r.studentId);
+        const se=[...new Set(r.secEvents||[])];
+        return`<tr><td class="txt-xs txt-muted">${i+1}</td>
+          <td><div class="fw6">${esc(st?.name||r.sName||'?')}</div><div class="txt-xs txt-muted">${esc(st?.roll||r.sRoll||'')}</div></td>
+          <td class="txt-sm">${esc(ex?.title||'—')}</td>
+          <td style="font-family:var(--mono);font-weight:700">${r.score}/${r.total}</td>
+          <td><div style="display:flex;align-items:center;gap:.35rem">${pbar(r.pct,r.passed?'var(--ok)':'var(--err)')}<span class="txt-xs fw6">${r.pct}%</span></div></td>
+          <td><span class="b ${r.passed?'bok':'berr'}">${r.passed?'Pass':'Fail'}</span></td>
+          <td>${se.length?se.map(e=>`<span class="b bwarn" style="font-size:.6rem;margin:.1rem">${e.replace(/_/g,' ')}</span>`).join(''):'<span class="txt-xs txt-muted">Clean</span>'}</td>
+          <td class="txt-xs txt-muted">${fDT(r._c)}</td>
+        </tr>`;}).join('')}
+    </tbody></table></div>`
+    :'<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">No results yet</div></div>'}`;
+}
+
+function sResults(){
+  const sid=S.user.id;
+  const myR=DB.col('results').find(r=>r.studentId===sid);
+  const offR=DB.col('offline-results').find(r=>r.studentId===sid);
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">My Results</div><div class="ps">${myR.length+offR.length} total</div></div></div>
+    ${myR.length?`<div class="card mb2">
+      <div class="ch"><div class="ct">🖥️ Online Exams</div></div>
+      <div class="tw" style="border:none"><table><thead><tr><th>Exam</th><th>Score</th><th>Status</th><th>Review</th></tr></thead><tbody>
+        ${myR.map(r=>{const ex=DB.col('exams').one(e=>e.id===r.examId);return`<tr><td class="fw6">${esc(ex?.title||'?')}</td><td style="font-family:var(--mono);font-weight:700">${r.score}/${r.total}</td><td><span class="b ${r.passed?'bok':'berr'}">${r.passed?'Pass':'Fail'} ${r.pct}%</span></td><td><button class="btn btn-pri btn-sm" onclick="go('exam-review',{resultId:'${r.id}'})">Review</button></td></tr>`;}).join('')}
+      </tbody></table></div></div>`:''}
+    ${offR.length?`<div class="card">
+      <div class="ch"><div class="ct">📋 Offline Exams (OMR)</div></div>
+      <div class="tw" style="border:none"><table><thead><tr><th>Exam</th><th>Score</th><th>Status</th></tr></thead><tbody>
+        ${offR.map(r=>{const ex=DB.col('offline-exams').one(e=>e.id===r.examId);const pct=r.maxMarks>0?Math.round(r.marks/r.maxMarks*100):0;return`<tr><td class="fw6">${esc(ex?.title||'?')}</td><td style="font-family:var(--mono);font-weight:700">${r.marks}/${r.maxMarks}</td><td><span class="b ${pct>=(ex?.pass||40)?'bok':'berr'}">${pct>=(ex?.pass||40)?'Pass':'Fail'} ${pct}%</span></td></tr>`;}).join('')}
+      </tbody></table></div></div>`:''}
+    ${!myR.length&&!offR.length?'<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">No results yet</div></div>':''}`;
+}
+
+function pResults(){
+  const parent=S.user;const stu=DB.col('students').one(s=>s.id===parent.studentId);
+  if(!stu){document.getElementById('page').innerHTML='<div class="empty"><div class="empty-ico">⚠️</div></div>';return;}
+  const origId=S.user.id;S.user={...S.user,id:stu.id};sResults();S.user.id=origId;
+}
+
+// ═══════════════════════════════════════════════
+// OFFLINE EXAMS (EXAM CELL)
+// ═══════════════════════════════════════════════
+function eOfflineExams(){
+  const exams=DB.col('offline-exams').all().reverse();
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">Offline Exams</div></div>
+      <button class="btn btn-pri" onclick="openCreateOffline()">+ Create</button></div>
+    ${exams.length?`<div class="tw"><table><thead><tr><th>Title</th><th>Subject</th><th>Date</th><th>Max Marks</th><th>Results Entered</th><th></th></tr></thead><tbody>
+      ${exams.map(ex=>{
+        const cnt=DB.col('offline-results').find(r=>r.examId===ex.id).length;
+        return`<tr><td class="fw6">${esc(ex.title)}</td><td>${esc(ex.subject||'—')}</td><td>${fDate(ex.date)}</td><td style="font-family:var(--mono)">${ex.maxMarks}</td><td>${cnt}</td>
+          <td><button class="btn btn-pri btn-sm" onclick="go('enter-results',{examId:'${ex.id}'})">Enter Results</button></td></tr>`;}).join('')}
+    </tbody></table></div>`
+    :'<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">No offline exams</div></div>'}`;
+}
+
+function openCreateOffline(){
+  OM('Create Offline Exam',`
+    <div class="fg"><label>Title *</label><input class="fc" id="oe-t" placeholder="e.g. NEET Mock Test – March"></div>
+    <div class="fg"><label>Subject</label><input class="fc" id="oe-s" placeholder="e.g. Biology"></div>
+    <div class="fgrid">
+      <div class="fg"><label>Exam Date *</label><input class="fc" type="date" id="oe-d" value="${ds_fmt()}"></div>
+      <div class="fg"><label>Max Marks</label><input class="fc" type="number" id="oe-m" value="180" min="1"></div>
+      <div class="fg"><label>Pass %</label><input class="fc" type="number" id="oe-p" value="40" min="1"></div>
+      <div class="fg"><label>Batch</label><input class="fc" id="oe-b" placeholder="All or e.g. NEET-11"></div>
+    </div>`,
+    [{l:'Cancel',fn:'CM()'},{l:'Create',fn:'saveOfflineExam()',c:'btn-pri'}]
+  );
+}
+
+function saveOfflineExam(){
+  const t=(document.getElementById('oe-t').value||'').trim();
+  if(!t){toast('Title required','err');return;}
+  DB.col('offline-exams').ins({title:t,subject:document.getElementById('oe-s').value.trim(),date:document.getElementById('oe-d').value,maxMarks:parseInt(document.getElementById('oe-m').value)||180,pass:parseInt(document.getElementById('oe-p').value)||40,batch:document.getElementById('oe-b').value.trim()});
+  toast('Offline exam created','ok');CM();eOfflineExams();
+}
+
+// ─── Enter OMR Results ───
+function eEnterResults(){
+  const examId=S.params?.examId;
+  const exams=DB.col('offline-exams').all();
+  if(!exams.length){document.getElementById('page').innerHTML='<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Create offline exams first</div></div>';return;}
+  const selExam=examId?DB.col('offline-exams').one(e=>e.id===examId):exams[0];
+  const entered=selExam?DB.col('offline-results').find(r=>r.examId===selExam.id):[];
+  const enteredIds=new Set(entered.map(r=>r.studentId));
+  const students=DB.col('students').all();
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">Enter OMR Results</div><div class="ps">After OMR checking</div></div></div>
+    <div class="fg mb2"><label>Select Offline Exam</label>
+      <select class="fc" onchange="go('enter-results',{examId:this.value})">
+        ${exams.map(e=>`<option value="${e.id}" ${selExam?.id===e.id?'selected':''}>${esc(e.title)}</option>`).join('')}
+      </select></div>
+    ${selExam?`
+      <div class="card mb2"><div class="cb" style="display:flex;gap:.85rem;flex-wrap:wrap">
+        <div><div class="fw6 txt-sm">${esc(selExam.title)}</div><div class="txt-xs txt-muted">Max: ${selExam.maxMarks} | Pass: ${selExam.pass}% | Date: ${fDate(selExam.date)}</div></div>
+        <span class="b bpri">${entered.length}/${students.length} entered</span>
+      </div></div>
+      <div style="display:flex;gap:.65rem;margin-bottom:1rem">
+        <input class="fc" style="max-width:260px" id="omr-search" placeholder="Search student…" oninput="renderOMRList()">
+        <button class="btn btn-pri" onclick="openBulkOMR('${selExam.id}')">📥 Bulk Entry</button>
+      </div>
+      <div id="omr-list"></div>`:''}`;
+  if(selExam)renderOMRList(selExam,entered,enteredIds,students);
+}
+
+function renderOMRList(selExam,entered,enteredIds,students){
+  if(!selExam){const eid=S.params?.examId;selExam=DB.col('offline-exams').one(e=>e.id===eid)||DB.col('offline-exams').all()[0];entered=selExam?DB.col('offline-results').find(r=>r.examId===selExam.id):[];enteredIds=new Set(entered.map(r=>r.studentId));students=DB.col('students').all();}
+  const q=(document.getElementById('omr-search')?.value||'').toLowerCase();
+  const list=q?students.filter(s=>s.name.toLowerCase().includes(q)||s.roll.includes(q)):students;
+  const el=document.getElementById('omr-list');if(!el)return;
+  el.innerHTML=`<div class="tw"><table><thead><tr><th>Student</th><th>Roll</th><th>Marks Obtained</th><th>Status</th><th></th></tr></thead><tbody>
+    ${list.map(s=>{
+      const r=entered.find(e=>e.studentId===s.id);
+      const pct=r?Math.round(r.marks/selExam.maxMarks*100):null;
+      return`<tr><td class="fw6">${esc(s.name)}</td><td style="font-family:var(--mono);font-size:.8rem">${esc(s.roll)}</td>
+        <td>${r?`<span style="font-family:var(--mono);font-weight:700">${r.marks}/${selExam.maxMarks}</span>`:'<span class="txt-muted txt-sm">Not entered</span>'}</td>
+        <td>${pct!==null?`<span class="b ${pct>=selExam.pass?'bok':'berr'}">${pct>=selExam.pass?'Pass':'Fail'} ${pct}%</span>`:'<span class="b bgray">Pending</span>'}</td>
+        <td><button class="btn btn-${r?'out':'pri'} btn-sm" onclick="openOMREntry('${selExam.id}','${s.id}','${s.name}','${s.roll}','${selExam.maxMarks}','${r?.marks||''}','${r?.id||''}')">
+          ${r?'Edit':'Enter'}
+        </button></td>
+      </tr>`;}).join('')}
+  </tbody></table></div>`;
+}
+
+function openOMREntry(examId,studentId,name,roll,max,curMarks,curId){
+  OM(`Enter Marks: ${name}`,`
+    <div class="txt-sm txt-muted mb2">Roll: ${roll} | Max Marks: ${max}</div>
+    <div class="fg"><label>Marks Obtained *</label><input class="fc" id="omr-m" type="number" value="${curMarks}" min="0" max="${max}" placeholder="0-${max}"></div>
+    <div class="fg"><label>Remarks (optional)</label><input class="fc" id="omr-r" placeholder="e.g. Good attempt"></div>`,
+    [{l:'Cancel',fn:'CM()'},{l:'Save',fn:`saveOMREntry('${examId}','${studentId}','${max}','${curId}')`,c:'btn-pri'}]
+  );
+}
+
+function saveOMREntry(examId,studentId,max,curId){
+  const marks=parseFloat(document.getElementById('omr-m').value);
+  if(isNaN(marks)||marks<0||marks>parseFloat(max)){toast('Invalid marks','err');return;}
+  const data={examId,studentId,marks,maxMarks:parseFloat(max),remarks:document.getElementById('omr-r').value.trim()};
+  if(curId){DB.col('offline-results').upd(curId,data);}else{DB.col('offline-results').ins(data);}
+  toast('Result saved','ok');CM();go('enter-results',{examId});
+}
+
+function openBulkOMR(examId){
+  const ex=DB.col('offline-exams').one(e=>e.id===examId);
+  OM('Bulk OMR Entry',`
+    <div style="background:var(--pri-l);border-radius:var(--r);padding:.85rem;color:var(--pri);font-size:.8rem;margin-bottom:1rem">CSV format: RollNo, MarksObtained — one per line</div>
+    <div class="fg"><label>Upload CSV</label><input type="file" class="fc" accept=".csv" onchange="parseBulkOMR(this,'${examId}','${ex?.maxMarks}')"></div>
+    <div id="bulk-res" class="mt1"></div>`,
+    [{l:'Close',fn:'CM()'}]
+  );
+}
+
+function parseBulkOMR(input,examId,max){
+  const file=input.files[0];if(!file)return;
+  const fr=new FileReader();
+  fr.onload=e=>{
+    const lines=e.target.result.split('\n').filter(l=>l.trim());
+    let imp=0;
+    lines.forEach(line=>{
+      const [roll,marks]=line.split(',').map(s=>s.trim());
+      const stu=DB.col('students').one(s=>s.roll===roll);
+      const m=parseFloat(marks);
+      if(!stu||isNaN(m))return;
+      const existing=DB.col('offline-results').one(r=>r.examId===examId&&r.studentId===stu.id);
+      if(existing)DB.col('offline-results').upd(existing.id,{marks:m,maxMarks:parseFloat(max)});
+      else DB.col('offline-results').ins({examId,studentId:stu.id,marks:m,maxMarks:parseFloat(max)});
+      imp++;
+    });
+    document.getElementById('bulk-res').innerHTML=`<div style="background:var(--ok-l);border-radius:var(--r);padding:.7rem;color:var(--ok);font-size:.8rem">✓ Imported ${imp} results</div>`;
+    go('enter-results',{examId});
+  };
+  fr.readAsText(file);
+}
+
+// ═══════════════════════════════════════════════
+// FEES
+// ═══════════════════════════════════════════════
+function tFees(){
+  const students=DB.col('students').all();
+  const allFees=DB.col('fees').all();
+  const pending=allFees.filter(f=>f.status==='pending');
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">Fees Management</div></div>
+      <button class="btn btn-pri" onclick="openAddFee()">+ Add Fee</button></div>
+    <div class="sg">
+      ${sc('💰','var(--acc-l)','₹'+allFees.reduce((a,f)=>a+f.amount,0).toLocaleString(),'Total Fees','Raised','var(--warn)')}
+      ${sc('✓','var(--ok-l)','₹'+allFees.filter(f=>f.status==='paid').reduce((a,f)=>a+f.amount,0).toLocaleString(),'Collected','Paid','var(--ok)')}
+      ${sc('⏳','var(--err-l)','₹'+pending.reduce((a,f)=>a+f.amount,0).toLocaleString(),'Pending','Unpaid','var(--err)')}
+    </div>
+    <div class="tw"><table><thead><tr><th>Student</th><th>Description</th><th>Amount</th><th>Due Date</th><th>Status</th><th></th></tr></thead><tbody>
+      ${allFees.length?allFees.reverse().map(f=>{
+        const stu=DB.col('students').one(s=>s.id===f.studentId);
+        return`<tr><td class="fw6">${esc(stu?.name||'?')}<div class="txt-xs txt-muted">${esc(stu?.roll||'')}</div></td>
+          <td class="txt-sm">${esc(f.desc)}</td>
+          <td style="font-family:var(--mono);font-weight:700">₹${f.amount.toLocaleString()}</td>
+          <td class="txt-sm">${fDate(f.due)}</td>
+          <td><span class="b ${f.status==='paid'?'bok':'berr'}">${f.status==='paid'?'Paid':'Pending'}</span></td>
+          <td><div style="display:flex;gap:.3rem">
+            ${f.status==='pending'?`<button class="btn btn-ok btn-sm" onclick="markFeePaid('${f.id}')">Mark Paid</button>`:''}
+            <button class="btn btn-err btn-sm btn-ico" onclick="delFee('${f.id}')">✕</button>
+          </div></td>
+        </tr>`;}).join(''):'<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3)">No fees added yet</td></tr>'}
+    </tbody></table></div>`;
+}
+
+function openAddFee(){
+  const students=DB.col('students').all();
+  OM('Add Fee Record',`
+    <div class="fg"><label>Student *</label><select class="fc" id="f-stu"><option value="">Select student</option>${students.map(s=>`<option value="${s.id}">${esc(s.name)} (${s.roll})</option>`).join('')}</select></div>
+    <div class="fg"><label>Description *</label><input class="fc" id="f-desc" placeholder="e.g. Term 2 Fees, Hostel Charges"></div>
+    <div class="fgrid">
+      <div class="fg"><label>Amount (₹) *</label><input class="fc" type="number" id="f-amt" min="0" placeholder="0"></div>
+      <div class="fg"><label>Due Date *</label><input class="fc" type="date" id="f-due" value="${ds_fmt()}"></div>
+    </div>`,
+    [{l:'Cancel',fn:'CM()'},{l:'Add Fee',fn:'saveFee()',c:'btn-pri'}]
+  );
+}
+
+function saveFee(){
+  const sid=document.getElementById('f-stu').value;
+  const desc=(document.getElementById('f-desc').value||'').trim();
+  const amt=parseFloat(document.getElementById('f-amt').value);
+  if(!sid||!desc||isNaN(amt)||amt<=0){toast('Fill all required fields','err');return;}
+  DB.col('fees').ins({studentId:sid,desc,amount:amt,due:document.getElementById('f-due').value,status:'pending'});
+  toast('Fee added','ok');CM();tFees();
+}
+function markFeePaid(id){DB.col('fees').upd(id,{status:'paid',paidAt:Date.now()});toast('Marked paid','ok');tFees();}
+function delFee(id){if(!confirm('Delete?'))return;DB.col('fees').del(id);tFees();}
+
+function sFees(){
+  const fees=DB.col('fees').find(f=>f.studentId===S.user.id);
+  const pending=fees.filter(f=>f.status==='pending');
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">My Fees</div></div></div>
+    <div class="sg" style="grid-template-columns:1fr 1fr">
+      ${sc('⏳','var(--err-l)','₹'+pending.reduce((a,f)=>a+f.amount,0).toLocaleString(),'Pending','','var(--err)')}
+      ${sc('✓','var(--ok-l)','₹'+fees.filter(f=>f.status==='paid').reduce((a,f)=>a+f.amount,0).toLocaleString(),'Paid','','var(--ok)')}
+    </div>
+    ${fees.length?`<div class="tw"><table><thead><tr><th>Description</th><th>Amount</th><th>Due Date</th><th>Status</th></tr></thead><tbody>
+      ${fees.reverse().map(f=>`<tr><td class="fw6">${esc(f.desc)}</td><td style="font-family:var(--mono);font-weight:700">₹${f.amount.toLocaleString()}</td><td>${fDate(f.due)}</td><td><span class="b ${f.status==='paid'?'bok':'berr'}">${f.status==='paid'?'Paid':'Pending'}</span></td></tr>`).join('')}
+    </tbody></table></div>`:'<div class="empty"><div class="empty-ico">💰</div><div class="empty-txt">No fee records</div></div>'}`;
+}
+
+function pFees(){
+  const parent=S.user;const stu=DB.col('students').one(s=>s.id===parent.studentId);
+  if(!stu){document.getElementById('page').innerHTML='<div class="empty"><div class="empty-ico">⚠️</div></div>';return;}
+  const origId=S.user.id;S.user={...S.user,id:stu.id};sFees();S.user.id=origId;
+}
+
+// ═══════════════════════════════════════════════
+// ANNOUNCEMENTS
+// ═══════════════════════════════════════════════
+function pgAnn(){
+  const anns=DB.col('announcements').all().reverse();
+  const isTeach=S.role==='teacher';
+  document.getElementById('page').innerHTML=`
+    <div class="ph"><div><div class="pt">Announcements</div></div>${isTeach?`<button class="btn btn-pri" onclick="openAddAnn()">+ New</button>`:''}</div>
+    ${anns.map(a=>`<div class="card mb1">
+      <div class="cb" style="display:flex;gap:.85rem">
+        <div style="width:5px;border-radius:4px;background:${a.pri==='high'?'var(--err)':a.pri==='med'?'var(--warn)':'var(--ok)'};flex-shrink:0"></div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+            <div class="fw7">${esc(a.title)}</div>
+            ${isTeach?`<button class="btn btn-err btn-sm btn-ico" onclick="delAnn('${a.id}')">✕</button>`:''}
+          </div>
+          <div class="txt-sm mt1" style="line-height:1.65">${esc(a.content)}</div>
+          <div class="txt-xs txt-muted mt1">${fDT(a._c)} · <span class="b ${a.pri==='high'?'berr':a.pri==='med'?'bwarn':'bok'}">${a.pri}</span></div>
+        </div>
+      </div></div>`).join('')||'<div class="empty"><div class="empty-ico">📢</div><div class="empty-txt">No announcements</div></div>'}`;
+}
+
+function openAddAnn(){
+  OM('New Announcement',`
+    <div class="fg"><label>Title *</label><input class="fc" id="an-t" placeholder="Title"></div>
+    <div class="fg"><label>Message *</label><textarea class="fc" id="an-c" placeholder="Write here..."></textarea></div>
+    <div class="fg"><label>Priority</label><select class="fc" id="an-p"><option value="low">Low</option><option value="med" selected>Medium</option><option value="high">High</option></select></div>`,
+    [{l:'Cancel',fn:'CM()'},{l:'Post',fn:'saveAnn()',c:'btn-pri'}]
+  );
+}
+function saveAnn(){const t=(document.getElementById('an-t').value||'').trim(),c=(document.getElementById('an-c').value||'').trim();if(!t||!c){toast('Title & message required','err');return;}DB.col('announcements').ins({title:t,content:c,pri:document.getElementById('an-p').value});toast('Posted','ok');CM();pgAnn();}
+function delAnn(id){if(!confirm('Delete?'))return;DB.col('announcements').del(id);pgAnn();}
+
+// ═══════════════════════════════════════════════
+// CHANGE PASSWORD
+// ═══════════════════════════════════════════════
+function pgChPwd(){
+  const roleLabels={student:'Roll Number (unchangeable)',teacher:'Username (unchangeable)',parent:'Parent ID (unchangeable)',exam:'Username (unchangeable)'};
+  const idVal={student:S.user.roll,teacher:S.user.uname,parent:S.user.pid,exam:S.user.uname}[S.role]||'—';
+  document.getElementById('page').innerHTML=`
+    <div style="max-width:420px;margin:0 auto">
+      <div class="ph"><div><div class="pt">Change Password</div></div></div>
+      <div class="card">
+        <div class="cb">
+          <div class="fg">
+            <label>${roleLabels[S.role]}</label>
+            <input class="fc" value="${esc(idVal)}" readonly style="opacity:.6;cursor:not-allowed">
+          </div>
+          <div class="fg"><label>Current Password *</label><input class="fc" id="cp-cur" type="password" placeholder="Current password"></div>
+          <div class="fg"><label>New Password *</label><input class="fc" id="cp-new" type="password" placeholder="New password (min 4 chars)"></div>
+          <div class="fg"><label>Confirm New Password *</label><input class="fc" id="cp-con" type="password" placeholder="Confirm new password"></div>
+          <div id="cp-alert"></div>
+          <button class="btn btn-pri btn-lg" style="width:100%;justify-content:center;margin-top:.5rem" onclick="doChPwd()">Update Password</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function doChPwd(){
+  const cur=(document.getElementById('cp-cur').value||'').trim();
+  const nw=(document.getElementById('cp-new').value||'').trim();
+  const con=(document.getElementById('cp-con').value||'').trim();
+  const alert=document.getElementById('cp-alert');
+  const show=(msg,t)=>{alert.innerHTML=`<div style="background:var(--${t}-l);border:1px solid rgba(0,0,0,.1);border-radius:var(--r);padding:.65rem .85rem;font-size:.82rem;color:var(--${t});margin-top:.65rem">${msg}</div>`;};
+  if(!cur||!nw||!con){show('All fields required','err');return;}
+  if(nw.length<4){show('New password must be at least 4 characters','err');return;}
+  if(nw!==con){show('Passwords do not match','err');return;}
+  const cols={student:'students',teacher:'teachers',parent:'parents',exam:'examiners'};
+  const col=DB.col(cols[S.role]);
+  const user=col.one(u=>u.id===S.user.id);
+  if(!user||(user.pwd||'1234')!==cur&&(user.pwd||'pass123')!==cur&&(user.pwd||'exam123')!==cur&&user.pwd!==cur){show('Current password is incorrect','err');return;}
+  col.upd(S.user.id,{pwd:nw});
+  S.user.pwd=nw;
+  DB.s('session',{uid:S.user.id,role:S.role,loginAt:Date.now()});
+  show('✓ Password updated successfully!','ok');
+  toast('Password changed','ok');
+}
+
+// ═══════════════════════════════════════════════
+// SEED DATA
+// ═══════════════════════════════════════════════
+function seed(){
+  if(DB.g('_seeded_v3'))return;
+  // Teachers
+  DB.col('teachers').ins({id:'T1',name:'Rajesh Kumar',uname:'teacher1',pwd:'pass123',subject:'Physics',phone:'9001234567'});
+  DB.col('teachers').ins({id:'T2',name:'Priya Sharma',uname:'teacher2',pwd:'pass123',subject:'Chemistry',phone:'9001234568'});
+  // Examiners
+  DB.col('examiners').ins({id:'E1',name:'Exam Cell',uname:'exam1',pwd:'exam123'});
+  // Students
+  const stuData=[
+    ['Aarav Sharma','2024001','JEE-11','9812345001','Suresh Sharma','9712345001'],
+    ['Priya Gupta','2024002','JEE-12','9812345002','Ramesh Gupta','9712345002'],
+    ['Rahul Mehta','2024003','NEET-11','9812345003','Dinesh Mehta','9712345003'],
+    ['Sneha Patel','2024004','NEET-12','9812345004','Kamlesh Patel','9712345004'],
+    ['Karan Singh','2024005','JEE-11','9812345005','Vijay Singh','9712345005'],
+  ];
+  const stuIds=stuData.map(([name,roll,batch,phone,pName,pPhone])=>DB.col('students').ins({name,roll,batch,phone,parentName:pName,parentPhone:pPhone,pwd:'1234'}).id);
+  // Parents (linked to first 3 students)
+  stuIds.slice(0,3).forEach((sid,i)=>{
+    const [,,,, pName]=stuData[i];
+    DB.col('parents').ins({id:'P00'+(i+1),name:pName,pid:'P00'+(i+1),pwd:'1234',studentId:sid});
+  });
+  // Attendance (last 10 days)
+  for(let d=0;d<10;d++){
+    const dt=new Date();dt.setDate(dt.getDate()-d);const ds=ds_fmt(dt);const att={};
+    stuIds.forEach((sid,i)=>{att[sid]=Math.random()>.15?'P':'A';});ATT.s(ds,att);
+  }
+  // Exam
+  const qs=[
+    {type:'mcq',text:"Newton's 2nd Law: F = ?",options:['ma','mv','mv²','m/a'],correct:0,exp:'Force = mass × acceleration. This is the fundamental relation.'},
+    {type:'mcq',text:'SI unit of Electric Current:',options:['Volt','Watt','Ampere','Ohm'],correct:2,exp:'Ampere (A) is the SI unit of electric current.'},
+    {type:'tf',text:'Light travels faster than sound.',options:['True','False'],correct:'True',exp:'Light travels at ~3×10⁸ m/s, sound at ~343 m/s in air.'},
+    {type:'mcq',text:'Atomic number of Oxygen:',options:['6','7','8','9'],correct:2,exp:'Oxygen has 8 protons, so atomic number = 8.'},
+    {type:'short',text:'Define Ohm\'s Law in one sentence.',model:'V = IR; voltage equals current times resistance.',exp:'Ohm\'s Law: V = IR'},
+  ];
+  const ex=DB.col('exams').ins({type:'online',title:'Science Weekly Test 1',subject:'Physics/Chem',duration:15,mpq:4,neg:1,pass:40,batch:'',questions:qs.map((q,i)=>({...q,id:i})),security:{cam:'optional',tab:'submit',shuffle:true},id:'DEMO01'});
+  // Some results
+  stuIds.slice(0,3).forEach((sid,i)=>{
+    const al=[{origIdx:0,visIdx:0,ans:0,st:'correct'},{origIdx:1,visIdx:1,ans:2,st:'correct'},{origIdx:2,visIdx:2,ans:'True',st:'correct'},{origIdx:3,visIdx:3,ans:i===0?2:1,st:i===0?'correct':'wrong'},{origIdx:4,visIdx:4,ans:'',st:'skip'}];
+    const score=i===0?12:8;const total=16;const pct=Math.round(score/total*100);
+    DB.col('results').ins({examId:ex.id,studentId:sid,sName:stuData[i][0],sRoll:stuData[i][1],score,total,pct,passed:pct>=40,correct:i===0?3:2,wrong:i===0?1:2,skipped:1,secEvents:[],answerLog:al});
+  });
+  // Offline exam
+  const oe=DB.col('offline-exams').ins({title:'NEET Mock Test – Physics',subject:'Physics',date:ds_fmt(),maxMarks:180,pass:40,batch:'NEET-11'});
+  DB.col('offline-results').ins({examId:oe.id,studentId:stuIds[2],marks:142,maxMarks:180});
+  // Fees
+  stuIds.forEach((sid,i)=>{
+    DB.col('fees').ins({studentId:sid,desc:'Term 1 Tuition Fee',amount:15000,due:ds_fmt(),status:i<2?'paid':'pending',paidAt:i<2?Date.now():undefined});
+    DB.col('fees').ins({studentId:sid,desc:'Study Material Fee',amount:3500,due:ds_fmt(),status:'pending'});
+  });
+  // Announcements
+  DB.col('announcements').ins({title:'Welcome to SCI Chomu Portal!',content:'Dear students and parents, welcome to your new digital institute management system. You can now view attendance, results, fees and take online exams anytime.',pri:'high'});
+  DB.col('announcements').ins({title:'Science Weekly Test Scheduled',content:'Online test for all batches is now live. Students must complete it within the given time. See "My Exams" section.',pri:'med'});
+  DB.col('announcements').ins({title:'Attendance Reminder',content:'Minimum 75% attendance is compulsory. Students below 75% will not be permitted in final exams. Contact your batch coordinator for any issues.',pri:'low'});
+  DB.s('_seeded_v3',true);
+}
+
+// ═══════════════════════════════════════════════
+// PWA
+// ═══════════════════════════════════════════════
+function initPWA(){
+  const manifest={name:'Shivaji Career Institute, Chomu',short_name:'SCI Chomu',description:'Institute Management System',start_url:'.',display:'standalone',background_color:'#1E40AF',theme_color:'#1E40AF',icons:[{src:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="80" fill="#1E40AF"/><text x="256" y="300" font-size="200" font-weight="900" fill="white" text-anchor="middle" font-family="sans-serif">SCI</text></svg>'),sizes:'512x512',type:'image/svg+xml'}]};
+  const blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('link');link.rel='manifest';link.href=url;
+  document.head.appendChild(link);
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+seed();initPWA();
+setRole('student');
+window.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('login').classList.contains('on'))doLogin();});
+// Restore session
+if(restoreSession())startApp();else showLogin();
+</script>
+</body>
+</html>
